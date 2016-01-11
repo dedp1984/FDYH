@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nantian.dao.AccountBalRecordMapper">
+  <resultMap id="BaseResultMap" type="com.nantian.domain.AccountBalRecord">
+    <id column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <id column="GENDATE" jdbcType="DATE" property="gendate" />
+    <result column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
+    <result column="ACCOUNTNAME" jdbcType="VARCHAR" property="accountname" />
+    <result column="ACCOUNTTYPE" jdbcType="VARCHAR" property="accounttype" />
+    <result column="CUSTOMNO" jdbcType="VARCHAR" property="customno" />
+    <result column="SUBCODE" jdbcType="VARCHAR" property="subcode" />
+    <result column="CURRENCY" jdbcType="VARCHAR" property="currency" />
+    <result column="MACCOUNTID" jdbcType="VARCHAR" property="maccountid" />
+    <result column="PROPERTY" jdbcType="VARCHAR" property="property" />
+    <result column="ACCTSTATUS" jdbcType="VARCHAR" property="acctstatus" />
+    <result column="BAL" jdbcType="DOUBLE" property="bal" />
+    <result column="YEARAVG" jdbcType="DOUBLE" property="yearavg" />
+    <result column="BADYEARAVG" jdbcType="DOUBLE" property="badyearavg" />
+    <result column="M1" jdbcType="DOUBLE" property="m1" />
+    <result column="M2" jdbcType="DOUBLE" property="m2" />
+    <result column="M3" jdbcType="DOUBLE" property="m3" />
+    <result column="M4" jdbcType="DOUBLE" property="m4" />
+    <result column="M5" jdbcType="DOUBLE" property="m5" />
+    <result column="M6" jdbcType="DOUBLE" property="m6" />
+    <result column="M7" jdbcType="DOUBLE" property="m7" />
+    <result column="M8" jdbcType="DOUBLE" property="m8" />
+    <result column="M9" jdbcType="DOUBLE" property="m9" />
+    <result column="M10" jdbcType="DOUBLE" property="m10" />
+    <result column="M11" jdbcType="DOUBLE" property="m11" />
+    <result column="M12" jdbcType="DOUBLE" property="m12" />
+    <result column="MRATE" jdbcType="DOUBLE" property="mrate" />
+    <result column="FDFS" jdbcType="VARCHAR" property="fdfs" />
+    <result column="FDBL" jdbcType="DOUBLE" property="fdbl" />
+    <result column="WJFL" jdbcType="VARCHAR" property="wjfl" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ACCOUNTID, GENDATE, BRANCHID, ACCOUNTNAME, ACCOUNTTYPE, CUSTOMNO, SUBCODE, CURRENCY, 
+    MACCOUNTID, PROPERTY, ACCTSTATUS, BAL, YEARAVG, BADYEARAVG, M1, M2, M3, M4, M5, M6, 
+    M7, M8, M9, M10, M11, M12, MRATE, FDFS, FDBL, WJFL
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.nantian.domain.AccountBalRecordKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_accountbal_record
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and GENDATE = #{gendate,jdbcType=DATE}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.AccountBalRecordKey">
+    delete from t_accountbal_record
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and GENDATE = #{gendate,jdbcType=DATE}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.AccountBalRecord">
+    insert into t_accountbal_record (ACCOUNTID, GENDATE, BRANCHID, 
+      ACCOUNTNAME, ACCOUNTTYPE, CUSTOMNO, 
+      SUBCODE, CURRENCY, MACCOUNTID, 
+      PROPERTY, ACCTSTATUS, BAL, 
+      YEARAVG, BADYEARAVG, M1, 
+      M2, M3, M4, M5, 
+      M6, M7, M8, M9, 
+      M10, M11, M12, MRATE, 
+      FDFS, FDBL, WJFL)
+    values (#{accountid,jdbcType=VARCHAR}, #{gendate,jdbcType=DATE}, #{branchid,jdbcType=VARCHAR}, 
+      #{accountname,jdbcType=VARCHAR}, #{accounttype,jdbcType=VARCHAR}, #{customno,jdbcType=VARCHAR}, 
+      #{subcode,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{maccountid,jdbcType=VARCHAR}, 
+      #{property,jdbcType=VARCHAR}, #{acctstatus,jdbcType=VARCHAR}, #{bal,jdbcType=DOUBLE}, 
+      #{yearavg,jdbcType=DOUBLE}, #{badyearavg,jdbcType=DOUBLE}, #{m1,jdbcType=DOUBLE}, 
+      #{m2,jdbcType=DOUBLE}, #{m3,jdbcType=DOUBLE}, #{m4,jdbcType=DOUBLE}, #{m5,jdbcType=DOUBLE}, 
+      #{m6,jdbcType=DOUBLE}, #{m7,jdbcType=DOUBLE}, #{m8,jdbcType=DOUBLE}, #{m9,jdbcType=DOUBLE}, 
+      #{m10,jdbcType=DOUBLE}, #{m11,jdbcType=DOUBLE}, #{m12,jdbcType=DOUBLE}, #{mrate,jdbcType=DOUBLE}, 
+      #{fdfs,jdbcType=VARCHAR}, #{fdbl,jdbcType=DOUBLE}, #{wjfl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.AccountBalRecord">
+    insert into t_accountbal_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountid != null">
+        ACCOUNTID,
+      </if>
+      <if test="gendate != null">
+        GENDATE,
+      </if>
+      <if test="branchid != null">
+        BRANCHID,
+      </if>
+      <if test="accountname != null">
+        ACCOUNTNAME,
+      </if>
+      <if test="accounttype != null">
+        ACCOUNTTYPE,
+      </if>
+      <if test="customno != null">
+        CUSTOMNO,
+      </if>
+      <if test="subcode != null">
+        SUBCODE,
+      </if>
+      <if test="currency != null">
+        CURRENCY,
+      </if>
+      <if test="maccountid != null">
+        MACCOUNTID,
+      </if>
+      <if test="property != null">
+        PROPERTY,
+      </if>
+      <if test="acctstatus != null">
+        ACCTSTATUS,
+      </if>
+      <if test="bal != null">
+        BAL,
+      </if>
+      <if test="yearavg != null">
+        YEARAVG,
+      </if>
+      <if test="badyearavg != null">
+        BADYEARAVG,
+      </if>
+      <if test="m1 != null">
+        M1,
+      </if>
+      <if test="m2 != null">
+        M2,
+      </if>
+      <if test="m3 != null">
+        M3,
+      </if>
+      <if test="m4 != null">
+        M4,
+      </if>
+      <if test="m5 != null">
+        M5,
+      </if>
+      <if test="m6 != null">
+        M6,
+      </if>
+      <if test="m7 != null">
+        M7,
+      </if>
+      <if test="m8 != null">
+        M8,
+      </if>
+      <if test="m9 != null">
+        M9,
+      </if>
+      <if test="m10 != null">
+        M10,
+      </if>
+      <if test="m11 != null">
+        M11,
+      </if>
+      <if test="m12 != null">
+        M12,
+      </if>
+      <if test="mrate != null">
+        MRATE,
+      </if>
+      <if test="fdfs != null">
+        FDFS,
+      </if>
+      <if test="fdbl != null">
+        FDBL,
+      </if>
+      <if test="wjfl != null">
+        WJFL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountid != null">
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="gendate != null">
+        #{gendate,jdbcType=DATE},
+      </if>
+      <if test="branchid != null">
+        #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null">
+        #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null">
+        #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="customno != null">
+        #{customno,jdbcType=VARCHAR},
+      </if>
+      <if test="subcode != null">
+        #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="maccountid != null">
+        #{maccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="acctstatus != null">
+        #{acctstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="bal != null">
+        #{bal,jdbcType=DOUBLE},
+      </if>
+      <if test="yearavg != null">
+        #{yearavg,jdbcType=DOUBLE},
+      </if>
+      <if test="badyearavg != null">
+        #{badyearavg,jdbcType=DOUBLE},
+      </if>
+      <if test="m1 != null">
+        #{m1,jdbcType=DOUBLE},
+      </if>
+      <if test="m2 != null">
+        #{m2,jdbcType=DOUBLE},
+      </if>
+      <if test="m3 != null">
+        #{m3,jdbcType=DOUBLE},
+      </if>
+      <if test="m4 != null">
+        #{m4,jdbcType=DOUBLE},
+      </if>
+      <if test="m5 != null">
+        #{m5,jdbcType=DOUBLE},
+      </if>
+      <if test="m6 != null">
+        #{m6,jdbcType=DOUBLE},
+      </if>
+      <if test="m7 != null">
+        #{m7,jdbcType=DOUBLE},
+      </if>
+      <if test="m8 != null">
+        #{m8,jdbcType=DOUBLE},
+      </if>
+      <if test="m9 != null">
+        #{m9,jdbcType=DOUBLE},
+      </if>
+      <if test="m10 != null">
+        #{m10,jdbcType=DOUBLE},
+      </if>
+      <if test="m11 != null">
+        #{m11,jdbcType=DOUBLE},
+      </if>
+      <if test="m12 != null">
+        #{m12,jdbcType=DOUBLE},
+      </if>
+      <if test="mrate != null">
+        #{mrate,jdbcType=DOUBLE},
+      </if>
+      <if test="fdfs != null">
+        #{fdfs,jdbcType=VARCHAR},
+      </if>
+      <if test="fdbl != null">
+        #{fdbl,jdbcType=DOUBLE},
+      </if>
+      <if test="wjfl != null">
+        #{wjfl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.AccountBalRecord">
+    update t_accountbal_record
+    <set>
+      <if test="branchid != null">
+        BRANCHID = #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null">
+        ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null">
+        ACCOUNTTYPE = #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="customno != null">
+        CUSTOMNO = #{customno,jdbcType=VARCHAR},
+      </if>
+      <if test="subcode != null">
+        SUBCODE = #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        CURRENCY = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="maccountid != null">
+        MACCOUNTID = #{maccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        PROPERTY = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="acctstatus != null">
+        ACCTSTATUS = #{acctstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="bal != null">
+        BAL = #{bal,jdbcType=DOUBLE},
+      </if>
+      <if test="yearavg != null">
+        YEARAVG = #{yearavg,jdbcType=DOUBLE},
+      </if>
+      <if test="badyearavg != null">
+        BADYEARAVG = #{badyearavg,jdbcType=DOUBLE},
+      </if>
+      <if test="m1 != null">
+        M1 = #{m1,jdbcType=DOUBLE},
+      </if>
+      <if test="m2 != null">
+        M2 = #{m2,jdbcType=DOUBLE},
+      </if>
+      <if test="m3 != null">
+        M3 = #{m3,jdbcType=DOUBLE},
+      </if>
+      <if test="m4 != null">
+        M4 = #{m4,jdbcType=DOUBLE},
+      </if>
+      <if test="m5 != null">
+        M5 = #{m5,jdbcType=DOUBLE},
+      </if>
+      <if test="m6 != null">
+        M6 = #{m6,jdbcType=DOUBLE},
+      </if>
+      <if test="m7 != null">
+        M7 = #{m7,jdbcType=DOUBLE},
+      </if>
+      <if test="m8 != null">
+        M8 = #{m8,jdbcType=DOUBLE},
+      </if>
+      <if test="m9 != null">
+        M9 = #{m9,jdbcType=DOUBLE},
+      </if>
+      <if test="m10 != null">
+        M10 = #{m10,jdbcType=DOUBLE},
+      </if>
+      <if test="m11 != null">
+        M11 = #{m11,jdbcType=DOUBLE},
+      </if>
+      <if test="m12 != null">
+        M12 = #{m12,jdbcType=DOUBLE},
+      </if>
+      <if test="mrate != null">
+        MRATE = #{mrate,jdbcType=DOUBLE},
+      </if>
+      <if test="fdfs != null">
+        FDFS = #{fdfs,jdbcType=VARCHAR},
+      </if>
+      <if test="fdbl != null">
+        FDBL = #{fdbl,jdbcType=DOUBLE},
+      </if>
+      <if test="wjfl != null">
+        WJFL = #{wjfl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and GENDATE = #{gendate,jdbcType=DATE}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.AccountBalRecord">
+    update t_accountbal_record
+    set BRANCHID = #{branchid,jdbcType=VARCHAR},
+      ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      ACCOUNTTYPE = #{accounttype,jdbcType=VARCHAR},
+      CUSTOMNO = #{customno,jdbcType=VARCHAR},
+      SUBCODE = #{subcode,jdbcType=VARCHAR},
+      CURRENCY = #{currency,jdbcType=VARCHAR},
+      MACCOUNTID = #{maccountid,jdbcType=VARCHAR},
+      PROPERTY = #{property,jdbcType=VARCHAR},
+      ACCTSTATUS = #{acctstatus,jdbcType=VARCHAR},
+      BAL = #{bal,jdbcType=DOUBLE},
+      YEARAVG = #{yearavg,jdbcType=DOUBLE},
+      BADYEARAVG = #{badyearavg,jdbcType=DOUBLE},
+      M1 = #{m1,jdbcType=DOUBLE},
+      M2 = #{m2,jdbcType=DOUBLE},
+      M3 = #{m3,jdbcType=DOUBLE},
+      M4 = #{m4,jdbcType=DOUBLE},
+      M5 = #{m5,jdbcType=DOUBLE},
+      M6 = #{m6,jdbcType=DOUBLE},
+      M7 = #{m7,jdbcType=DOUBLE},
+      M8 = #{m8,jdbcType=DOUBLE},
+      M9 = #{m9,jdbcType=DOUBLE},
+      M10 = #{m10,jdbcType=DOUBLE},
+      M11 = #{m11,jdbcType=DOUBLE},
+      M12 = #{m12,jdbcType=DOUBLE},
+      MRATE = #{mrate,jdbcType=DOUBLE},
+      FDFS = #{fdfs,jdbcType=VARCHAR},
+      FDBL = #{fdbl,jdbcType=DOUBLE},
+      WJFL = #{wjfl,jdbcType=VARCHAR}
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and GENDATE = #{gendate,jdbcType=DATE}
+  </update>
+  
+  <delete id="deleteImportedData">
+      delete from t_accountbal_record 
+      where gendate=#{gendate} 
+      	 	and accounttype=#{accounttype}
+  </delete>
+</mapper>

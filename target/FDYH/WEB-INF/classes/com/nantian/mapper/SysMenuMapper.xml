@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.SysMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.SysMenu" >
+    <id column="MENUID" property="menuid" jdbcType="VARCHAR" />
+    <result column="MENUNAME" property="menuname" jdbcType="VARCHAR" />
+    <result column="PARENTMENUID" property="parentmenuid" jdbcType="VARCHAR" />
+    <result column="PAGEURL" property="pageurl" jdbcType="VARCHAR" />
+    <result column="ISACTION" property="isaction" jdbcType="VARCHAR" />
+    <result column="ACTIONNAME" property="actionname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    MENUID, MENUNAME, PARENTMENUID, PAGEURL, ISACTION, ACTIONNAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_MENU
+    where MENUID = #{menuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from SYS_MENU
+    where MENUID = #{menuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.SysMenu" >
+    insert into SYS_MENU (MENUID, MENUNAME, PARENTMENUID, 
+      PAGEURL, ISACTION, ACTIONNAME
+      )
+    values (#{menuid,jdbcType=VARCHAR}, #{menuname,jdbcType=VARCHAR}, #{parentmenuid,jdbcType=VARCHAR}, 
+      #{pageurl,jdbcType=VARCHAR}, #{isaction,jdbcType=VARCHAR}, #{actionname,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.SysMenu" >
+    insert into SYS_MENU
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuid != null" >
+        MENUID,
+      </if>
+      <if test="menuname != null" >
+        MENUNAME,
+      </if>
+      <if test="parentmenuid != null" >
+        PARENTMENUID,
+      </if>
+      <if test="pageurl != null" >
+        PAGEURL,
+      </if>
+      <if test="isaction != null" >
+        ISACTION,
+      </if>
+      <if test="actionname != null" >
+        ACTIONNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuid != null" >
+        #{menuid,jdbcType=VARCHAR},
+      </if>
+      <if test="menuname != null" >
+        #{menuname,jdbcType=VARCHAR},
+      </if>
+      <if test="parentmenuid != null" >
+        #{parentmenuid,jdbcType=VARCHAR},
+      </if>
+      <if test="pageurl != null" >
+        #{pageurl,jdbcType=VARCHAR},
+      </if>
+      <if test="isaction != null" >
+        #{isaction,jdbcType=VARCHAR},
+      </if>
+      <if test="actionname != null" >
+        #{actionname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.SysMenu" >
+    update SYS_MENU
+    <set >
+      <if test="menuname != null" >
+        MENUNAME = #{menuname,jdbcType=VARCHAR},
+      </if>
+      <if test="parentmenuid != null" >
+        PARENTMENUID = #{parentmenuid,jdbcType=VARCHAR},
+      </if>
+      <if test="pageurl != null" >
+        PAGEURL = #{pageurl,jdbcType=VARCHAR},
+      </if>
+      <if test="isaction != null" >
+        ISACTION = #{isaction,jdbcType=VARCHAR},
+      </if>
+      <if test="actionname != null" >
+        ACTIONNAME = #{actionname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MENUID = #{menuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.SysMenu" >
+    update SYS_MENU
+    set MENUNAME = #{menuname,jdbcType=VARCHAR},
+      PARENTMENUID = #{parentmenuid,jdbcType=VARCHAR},
+      PAGEURL = #{pageurl,jdbcType=VARCHAR},
+      ISACTION = #{isaction,jdbcType=VARCHAR},
+      ACTIONNAME = #{actionname,jdbcType=VARCHAR}
+    where MENUID = #{menuid,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectSubMenuListByAccountIdAndParentMenuId" parameterType="Map" resultMap="BaseResultMap">
+  	select distinct sysmenu.menuid,sysmenu.menuname,sysmenu.parentmenuid,sysmenu.pageurl from SYS_MENU sysmenu where sysmenu.menuid  in 
+	(
+       select sysrolemenu.menuid from SYS_ROLE_MENU sysrolemenu where sysrolemenu.roleid in 
+       (
+              select sysrole.roleid from SYS_ROLE sysrole where sysrole.roleid in 
+              (select sysaccountrole.roleid from SYS_ACCOUNT_ROLE sysaccountrole where sysaccountrole.accountid=#{accountid})
+       )
+	)  and sysmenu.parentmenuid=#{parentmenuid} and sysmenu.isaction='0' order by sysmenu.menuid asc
+  </select>
+  
+  <select id="selectSubMenuListByParentMenuId" parameterType="String" resultMap="BaseResultMap">
+  	select *  from sys_menu where parentmenuid=#{parentmenuid}
+  </select>
+</mapper>

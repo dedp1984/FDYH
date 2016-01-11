@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nantian.dao.BaseAccountMapper">
+  <resultMap id="BaseResultMap" type="com.nantian.domain.BaseAccount">
+    <id column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <result column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
+    <result column="ACCOUNTNAME" jdbcType="VARCHAR" property="accountname" />
+    <result column="ACCOUNTTYPE" jdbcType="VARCHAR" property="accounttype" />
+    <result column="MACCOUNTID" jdbcType="VARCHAR" property="maccountid" />
+    <result column="CUSTOMNO" jdbcType="VARCHAR" property="customno" />
+    <result column="CURRENCY" jdbcType="VARCHAR" property="currency" />
+    <result column="OPENDATE" jdbcType="DATE" property="opendate" />
+    <result column="ENDDATE" jdbcType="DATE" property="enddate" />
+    <result column="SUBCODE" jdbcType="VARCHAR" property="subcode" />
+    <result column="PROPERTY" jdbcType="VARCHAR" property="property" />
+    <result column="ACCTSTATUS" jdbcType="VARCHAR" property="acctstatus" />
+    <result column="SUBACCTTYPE" jdbcType="VARCHAR" property="subaccttype" />
+    <result column="PERCENT" jdbcType="DOUBLE" property="percent" />
+    <association column="branchid" property="branch" select="selectBranch" />
+    <collection column="accountid" ofType="java.util.HashMap" property="financeDetail" select="selectFinanceDetail" />
+    <collection column="accountid" ofType="java.util.HashMap" property="binds" select="selectAccountBinds" />
+  </resultMap>
+  
+  <!--查询理财产品明细-->
+  <resultMap id="FinanceDetailResultMap" type="com.nantian.domain.FinanceDetail">
+     <id column="SALEID" jdbcType="VARCHAR" property="saleid" />
+    <result column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <result column="PRODUCTID" jdbcType="VARCHAR" property="productid" />
+    <result column="PRODUCTBATCH" jdbcType="VARCHAR" property="productbatch" />
+    <result column="TRANAMT" jdbcType="DOUBLE" property="tranamt" />
+    <result column="YEARDAYAVG" jdbcType="DOUBLE" property="yeardayavg" />
+    <result column="STARTDATE" jdbcType="DATE" property="startdate" />
+    <result column="ENDDATE" jdbcType="DATE" property="enddate" />
+    <result column="CHANNEL" jdbcType="VARCHAR" property="channel" />
+    <result column="LASTMODIFYID" jdbcType="VARCHAR" property="lastmodifyid" />
+    <result column="LASTMODIFYDATE" jdbcType="DATE" property="lastmodifydate" />
+    <result column="ACCOUNTNAME" jdbcType="DATE" property="lastmodifyname" />
+  </resultMap>
+  <select id="selectFinanceDetail" parameterType="String" resultMap="FinanceDetailResultMap">
+      select a.*,b.accountname from t_finance_detail a 
+      left join sys_account b on a.lastmodifyid=b.accountid where a.accountid=#{accountid}
+  </select>
+  <!-- 查询质押存款明细-->
+  <resultMap id="PledgeDetailResultMap" type="com.nantian.domain.PersonPledgeAccount">
+    <id column="SALEID" jdbcType="VARCHAR" property="saleid" />
+    <result column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <result column="TRANAMT" jdbcType="DOUBLE" property="tranamt" />
+    <result column="STARTDATE" jdbcType="DATE" property="startdate" />
+    <result column="ENDDATE" jdbcType="DATE" property="enddate" />
+  </resultMap>
+  <select id="selectPledgeDetail" parameterType="String" resultMap="PledgeDetailResultMap">
+      select * from t_account_person_pledge where accountid=#{accountid} 
+  </select>
+  <!-- 查询账户绑定关系 -->
+   <resultMap id="BindsResult" type="java.util.HashMap">
+    <id column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <id column="MANAGERID" jdbcType="VARCHAR" property="managerid" />
+    <result column="ACCOUNTNAME" jdbcType="VARCHAR" property="managername"/>
+    <result column="PERCENT" jdbcType="DOUBLE" property="percent" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
+    <result column="BRANCHNAME" jdbcType="VARCHAR" property="branchname" />
+  </resultMap>
+  <select id="selectAccountBinds" parameterType="String" resultMap="BindsResult">
+  	select   *  from t_manager_account  a  
+  	left  join  sys_account b on a.managerid=b.accountid    
+  	left join sys_branch c on b.branchid=c.branchid  where a.accountid=#{accountid}
+  </select>
+  <!-- 查询机构信息 -->
+   <resultMap id="SysBranchResult" type="com.nantian.domain.SysBranch">
+    <id column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
+    <result column="BRANCHNAME" jdbcType="VARCHAR" property="branchname" />
+    <result column="PARENTID" jdbcType="VARCHAR" property="parentid" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="ALIAS" jdbcType="VARCHAR" property="alias" />
+  </resultMap>
+  <select id="selectBranch" parameterType="String" resultMap="SysBranchResult">
+  	select * from SYS_BRANCH where 1=1 and  BRANCHID=#{branchid}
+  </select>
+  <sql id="Base_Column_List">
+    ACCOUNTID, BRANCHID, ACCOUNTNAME, ACCOUNTTYPE, MACCOUNTID, CUSTOMNO, CURRENCY, OPENDATE, 
+    ENDDATE, SUBCODE, PROPERTY, ACCTSTATUS, SUBACCTTYPE
+  </sql>
+  <select id="selectBaseAccountList" parameterType="map" resultMap="BaseResultMap">
+      select  
+		a.accountid as accountid,
+		a.accountname as accountname,
+		a.accounttype as accounttype,
+		a.branchid as branchid,
+		b.managerid as managerid,
+		b.percent as percent,
+		b.type as type,
+		d.branchname as branchname
+	from 
+		t_account_base a  
+		<if test="financecreateid!=null and financecreateid!=''">
+			inner join t_finance_detail c on c.accountid=a.accountid
+    	</if>		
+		left join sys_branch d on a.branchid=d.branchid 
+		left join t_manager_account b on a.accountid=b.accountid
+		left join sys_account e on e.accountid=b.managerid
+	where (1=1
+    <if test="accountid != null and accountid!=''">
+        and a.ACCOUNTID like  CONCAT(CONCAT('%',#{accountid}),'%')
+    </if>
+    <if test="accountname != null and accountname!=''">
+        and a.ACCOUNTNAME like  CONCAT(CONCAT('%',#{accountname}),'%')
+    </if>
+    <if test="branchid != null and branchid!=''">
+        and e.branchid=#{branchid}
+    </if>
+    <if test="managerid != null and managerid!=''">
+        and b.managerid=#{managerid}
+    </if>
+    <if test="list !=null">
+         and a.accounttype in 
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </if>
+    <if test="subaccttype!=null and subaccttype!=''">
+        subaccttype=#{subaccttype}
+    </if>
+    )
+	 <if test="(financecreateid!=null and financecreateid!='') and (accountid==null or accountid=='') and (accountname==null or accountname=='')">
+        or (c.lastmodifyid=#{financecreateid})
+    </if>
+    group by a.accountid
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_account_base
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_account_base
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.BaseAccount">
+    insert into t_account_base (ACCOUNTID, BRANCHID, ACCOUNTNAME, 
+      ACCOUNTTYPE, MACCOUNTID, CUSTOMNO, 
+      CURRENCY, OPENDATE, ENDDATE, 
+      SUBCODE, PROPERTY, ACCTSTATUS, 
+      SUBACCTTYPE)
+    values (#{accountid,jdbcType=VARCHAR}, #{branchid,jdbcType=VARCHAR}, #{accountname,jdbcType=VARCHAR}, 
+      #{accounttype,jdbcType=VARCHAR}, #{maccountid,jdbcType=VARCHAR}, #{customno,jdbcType=VARCHAR}, 
+      #{currency,jdbcType=VARCHAR}, #{opendate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, 
+      #{subcode,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR}, #{acctstatus,jdbcType=VARCHAR}, 
+      #{subaccttype,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.BaseAccount">
+    insert into t_account_base
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountid != null">
+        ACCOUNTID,
+      </if>
+      <if test="branchid != null">
+        BRANCHID,
+      </if>
+      <if test="accountname != null">
+        ACCOUNTNAME,
+      </if>
+      <if test="accounttype != null">
+        ACCOUNTTYPE,
+      </if>
+      <if test="maccountid != null">
+        MACCOUNTID,
+      </if>
+      <if test="customno != null">
+        CUSTOMNO,
+      </if>
+      <if test="currency != null">
+        CURRENCY,
+      </if>
+      <if test="opendate != null">
+        OPENDATE,
+      </if>
+      <if test="enddate != null">
+        ENDDATE,
+      </if>
+      <if test="subcode != null">
+        SUBCODE,
+      </if>
+      <if test="property != null">
+        PROPERTY,
+      </if>
+      <if test="acctstatus != null">
+        ACCTSTATUS,
+      </if>
+      <if test="subaccttype != null">
+        SUBACCTTYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountid != null">
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="branchid != null">
+        #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null">
+        #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null">
+        #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="maccountid != null">
+        #{maccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="customno != null">
+        #{customno,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="opendate != null">
+        #{opendate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null">
+        #{enddate,jdbcType=DATE},
+      </if>
+      <if test="subcode != null">
+        #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="acctstatus != null">
+        #{acctstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="subaccttype != null">
+        #{subaccttype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.BaseAccount">
+    update t_account_base
+    <set>
+      <if test="branchid != null">
+        BRANCHID = #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null">
+        ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null">
+        ACCOUNTTYPE = #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="maccountid != null">
+        MACCOUNTID = #{maccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="customno != null">
+        CUSTOMNO = #{customno,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        CURRENCY = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="opendate != null">
+        OPENDATE = #{opendate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null">
+        ENDDATE = #{enddate,jdbcType=DATE},
+      </if>
+      <if test="subcode != null">
+        SUBCODE = #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        PROPERTY = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="acctstatus != null">
+        ACCTSTATUS = #{acctstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="subaccttype != null">
+        SUBACCTTYPE = #{subaccttype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.BaseAccount">
+    update t_account_base
+    set BRANCHID = #{branchid,jdbcType=VARCHAR},
+      ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      ACCOUNTTYPE = #{accounttype,jdbcType=VARCHAR},
+      MACCOUNTID = #{maccountid,jdbcType=VARCHAR},
+      CUSTOMNO = #{customno,jdbcType=VARCHAR},
+      CURRENCY = #{currency,jdbcType=VARCHAR},
+      OPENDATE = #{opendate,jdbcType=DATE},
+      ENDDATE = #{enddate,jdbcType=DATE},
+      SUBCODE = #{subcode,jdbcType=VARCHAR},
+      PROPERTY = #{property,jdbcType=VARCHAR},
+      ACCTSTATUS = #{acctstatus,jdbcType=VARCHAR},
+      SUBACCTTYPE = #{subaccttype,jdbcType=VARCHAR}
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

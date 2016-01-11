@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.SysAccountRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.SysAccountRoleKey" >
+    <id column="ACCOUNTID" property="accountid" jdbcType="VARCHAR" />
+    <id column="ROLEID" property="roleid" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.SysAccountRoleKey" >
+    delete from SYS_ACCOUNT_ROLE
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and ROLEID = #{roleid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.SysAccountRoleKey" >
+    insert into SYS_ACCOUNT_ROLE (ACCOUNTID, ROLEID)
+    values (#{accountid,jdbcType=VARCHAR}, #{roleid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.SysAccountRoleKey" >
+    insert into SYS_ACCOUNT_ROLE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        ACCOUNTID,
+      </if>
+      <if test="roleid != null" >
+        ROLEID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <delete id="deleteByAccountid" parameterType="String">
+  	delete from SYS_ACCOUNT_ROLE
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </delete>
+</mapper>

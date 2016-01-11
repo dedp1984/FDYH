@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.ImportRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.ImportRecord" >
+    <id column="BRANCHID" property="branchid" jdbcType="VARCHAR" />
+    <id column="FILETYPE" property="filetype" jdbcType="VARCHAR" />
+    <id column="IMPORTDATE" property="importdate" jdbcType="DATE" />
+    <result column="FILENAME" property="filename" jdbcType="VARCHAR" />
+    <result column="OPERID" property="operid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    BRANCHID, FILETYPE, IMPORTDATE, FILENAME, OPERID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.nantian.domain.ImportRecordKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_import_record
+    where BRANCHID = #{branchid,jdbcType=VARCHAR}
+      and FILETYPE = #{filetype,jdbcType=VARCHAR}
+      and IMPORTDATE = #{importdate,jdbcType=DATE}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.ImportRecordKey" >
+    delete from t_import_record
+    where BRANCHID = #{branchid,jdbcType=VARCHAR}
+      and FILETYPE = #{filetype,jdbcType=VARCHAR}
+      and IMPORTDATE = #{importdate,jdbcType=DATE}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.ImportRecord" >
+    insert into t_import_record (BRANCHID, FILETYPE, IMPORTDATE, 
+      FILENAME, OPERID)
+    values (#{branchid,jdbcType=VARCHAR}, #{filetype,jdbcType=VARCHAR}, #{importdate,jdbcType=DATE}, 
+      #{filename,jdbcType=VARCHAR}, #{operid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.ImportRecord" >
+    insert into t_import_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="branchid != null" >
+        BRANCHID,
+      </if>
+      <if test="filetype != null" >
+        FILETYPE,
+      </if>
+      <if test="importdate != null" >
+        IMPORTDATE,
+      </if>
+      <if test="filename != null" >
+        FILENAME,
+      </if>
+      <if test="operid != null" >
+        OPERID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="branchid != null" >
+        #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="filetype != null" >
+        #{filetype,jdbcType=VARCHAR},
+      </if>
+      <if test="importdate != null" >
+        #{importdate,jdbcType=DATE},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="operid != null" >
+        #{operid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.ImportRecord" >
+    update t_import_record
+    <set >
+      <if test="filename != null" >
+        FILENAME = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="operid != null" >
+        OPERID = #{operid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where BRANCHID = #{branchid,jdbcType=VARCHAR}
+      and FILETYPE = #{filetype,jdbcType=VARCHAR}
+      and IMPORTDATE = #{importdate,jdbcType=DATE}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.ImportRecord" >
+    update t_import_record
+    set FILENAME = #{filename,jdbcType=VARCHAR},
+      OPERID = #{operid,jdbcType=VARCHAR}
+    where BRANCHID = #{branchid,jdbcType=VARCHAR}
+      and FILETYPE = #{filetype,jdbcType=VARCHAR}
+      and IMPORTDATE = #{importdate,jdbcType=DATE}
+  </update>
+</mapper>

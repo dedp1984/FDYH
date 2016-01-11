@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.FinanceProductTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.FinanceProductType" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="ISJSRJ" property="isjsrj" jdbcType="VARCHAR" />
+    <result column="ISJSCKYE" property="isjsckye" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, TYPE, NAME, ISJSRJ, ISJSCKYE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_product_type
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectListByName" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_product_type where 1=1
+	<if test="name!=null and name!=''">
+	    and name like  CONCAT(CONCAT('%',#{name}),'%')
+	</if>
+	<if test="type!=null and type!=''">
+	    and type =#{type}
+	</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_finance_product_type
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.FinanceProductType" >
+    insert into t_finance_product_type (ID, TYPE, NAME, 
+      ISJSRJ, ISJSCKYE)
+    values (#{id,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{isjsrj,jdbcType=VARCHAR}, #{isjsckye,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.FinanceProductType" >
+    insert into t_finance_product_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="isjsrj != null" >
+        ISJSRJ,
+      </if>
+      <if test="isjsckye != null" >
+        ISJSCKYE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isjsrj != null" >
+        #{isjsrj,jdbcType=VARCHAR},
+      </if>
+      <if test="isjsckye != null" >
+        #{isjsckye,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.FinanceProductType" >
+    update t_finance_product_type
+    <set >
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isjsrj != null" >
+        ISJSRJ = #{isjsrj,jdbcType=VARCHAR},
+      </if>
+      <if test="isjsckye != null" >
+        ISJSCKYE = #{isjsckye,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.FinanceProductType" >
+    update t_finance_product_type
+    set TYPE = #{type,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      ISJSRJ = #{isjsrj,jdbcType=VARCHAR},
+      ISJSCKYE = #{isjsckye,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

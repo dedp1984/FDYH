@@ -1,0 +1,16 @@
+.enableVersion
+{
+	background-image: url('../images/release.gif');
+}
+.disableVersion
+{
+	background-image: url('../images/released.gif');
+}
+.editable
+{
+	background-image: url('../../images/detail.gif');
+}
+.editdisable
+{
+	background-image: url('../../images/modify.gif'); 
+}

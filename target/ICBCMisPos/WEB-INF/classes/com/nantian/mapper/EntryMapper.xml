@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.EntryMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.Entry" >
+    <id column="ENTRYID" property="entryid" jdbcType="VARCHAR" />
+    <result column="AREAID" property="areaid" jdbcType="VARCHAR" />
+    <result column="ENTRYNAME" property="entryname" jdbcType="VARCHAR" />
+    <result column="ENTRYTYPE" property="entrytype" jdbcType="VARCHAR" />
+    <result column="FLOORCNT" property="floorcnt" jdbcType="VARCHAR" />
+    <result column="FLOORROOMCNT" property="floorroomcnt" jdbcType="VARCHAR" />
+    <result column="LASTMODIFYUSER" property="lastmodifyuser" jdbcType="VARCHAR" />
+    <result column="LASTMODIFYTIME" property="lastmodifytime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ENTRYID, AREAID, ENTRYNAME, ENTRYTYPE, FLOORCNT, FLOORROOMCNT, LASTMODIFYUSER, LASTMODIFYTIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ENTRY
+    where ENTRYID = #{entryid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectEntryList" parameterType="com.nantian.domain.Entry"  resultMap="BaseResultMap">
+    select * from  T_ENTRY where 1=1
+      <if test="areaid != null and areaid!=''"  >
+        AND AREAID=#{areaid}
+      </if>
+      <if test="entryid != null and entryid!=''" >
+        AND ENTRYID=#{entryid}
+      </if>
+      <if test="entryname != null and entryname!=''" >
+        AND ENTRYNAME=#{entryname}
+      </if>
+      <if test="entrytype != null and entrytype!=''" >
+        AND ENTRYTYPE=#{entrytype}
+      </if>
+      order by entryname
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_ENTRY
+    where ENTRYID = #{entryid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.Entry" >
+    insert into T_ENTRY (ENTRYID, AREAID, ENTRYNAME, 
+      ENTRYTYPE, FLOORCNT, FLOORROOMCNT, 
+      LASTMODIFYUSER, LASTMODIFYTIME)
+    values (#{entryid,jdbcType=VARCHAR}, #{areaid,jdbcType=VARCHAR}, #{entryname,jdbcType=VARCHAR}, 
+      #{entrytype,jdbcType=VARCHAR}, #{floorcnt,jdbcType=VARCHAR}, #{floorroomcnt,jdbcType=VARCHAR}, 
+      #{lastmodifyuser,jdbcType=VARCHAR}, #{lastmodifytime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.Entry" >
+    insert into T_ENTRY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="entryid != null" >
+        ENTRYID,
+      </if>
+      <if test="areaid != null" >
+        AREAID,
+      </if>
+      <if test="entryname != null" >
+        ENTRYNAME,
+      </if>
+      <if test="entrytype != null" >
+        ENTRYTYPE,
+      </if>
+      <if test="floorcnt != null" >
+        FLOORCNT,
+      </if>
+      <if test="floorroomcnt != null" >
+        FLOORROOMCNT,
+      </if>
+      <if test="lastmodifyuser != null" >
+        LASTMODIFYUSER,
+      </if>
+      <if test="lastmodifytime != null" >
+        LASTMODIFYTIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="entryid != null" >
+        #{entryid,jdbcType=VARCHAR},
+      </if>
+      <if test="areaid != null" >
+        #{areaid,jdbcType=VARCHAR},
+      </if>
+      <if test="entryname != null" >
+        #{entryname,jdbcType=VARCHAR},
+      </if>
+      <if test="entrytype != null" >
+        #{entrytype,jdbcType=VARCHAR},
+      </if>
+      <if test="floorcnt != null" >
+        #{floorcnt,jdbcType=VARCHAR},
+      </if>
+      <if test="floorroomcnt != null" >
+        #{floorroomcnt,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyuser != null" >
+        #{lastmodifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifytime != null" >
+        #{lastmodifytime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.Entry" >
+    update T_ENTRY
+    <set >
+      <if test="areaid != null" >
+        AREAID = #{areaid,jdbcType=VARCHAR},
+      </if>
+      <if test="entryname != null" >
+        ENTRYNAME = #{entryname,jdbcType=VARCHAR},
+      </if>
+      <if test="entrytype != null" >
+        ENTRYTYPE = #{entrytype,jdbcType=VARCHAR},
+      </if>
+      <if test="floorcnt != null" >
+        FLOORCNT = #{floorcnt,jdbcType=VARCHAR},
+      </if>
+      <if test="floorroomcnt != null" >
+        FLOORROOMCNT = #{floorroomcnt,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyuser != null" >
+        LASTMODIFYUSER = #{lastmodifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifytime != null" >
+        LASTMODIFYTIME = #{lastmodifytime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ENTRYID = #{entryid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.Entry" >
+    update T_ENTRY
+    set AREAID = #{areaid,jdbcType=VARCHAR},
+      ENTRYNAME = #{entryname,jdbcType=VARCHAR},
+      ENTRYTYPE = #{entrytype,jdbcType=VARCHAR},
+      FLOORCNT = #{floorcnt,jdbcType=VARCHAR},
+      FLOORROOMCNT = #{floorroomcnt,jdbcType=VARCHAR},
+      LASTMODIFYUSER = #{lastmodifyuser,jdbcType=VARCHAR},
+      LASTMODIFYTIME = #{lastmodifytime,jdbcType=VARCHAR}
+    where ENTRYID = #{entryid,jdbcType=VARCHAR}
+  </update>
+</mapper>

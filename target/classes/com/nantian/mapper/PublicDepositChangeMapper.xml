@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.PublicDepositChangeMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.PublicDepositChange" >
+    <id column="ACCOUNTNAME" property="accountname" jdbcType="VARCHAR" />
+    <id column="GENDATE" property="gendate" jdbcType="DATE" />
+    <result column="GENYEAR" property="genyear" jdbcType="VARCHAR" />
+    <result column="BRANCHID" property="branchid" jdbcType="VARCHAR" />
+    <result column="BRANCHNAME" property="branchname" jdbcType="VARCHAR" />
+    <result column="DQYE" property="dqye" jdbcType="DOUBLE" />
+    <result column="NCYE" property="ncye" jdbcType="DOUBLE" />
+    <result column="TOLASTDAY" property="tolastday" jdbcType="DOUBLE" />
+    <result column="TOLASTYEAR" property="tolastyear" jdbcType="DOUBLE" />
+    <result column="SUBCODE" property="subcode" jdbcType="VARCHAR" />
+    <result column="INAMT" property="inamt" jdbcType="DOUBLE" />
+    <result column="OUTAMT" property="outamt" jdbcType="DOUBLE" />
+    <result column="NETINOUT" property="netinout" jdbcType="DOUBLE" />
+    <result column="CURRENCY" property="currency" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ACCOUNTNAME, GENDATE, GENYEAR, BRANCHID, BRANCHNAME, DQYE, NCYE, TOLASTDAY, TOLASTYEAR, 
+    SUBCODE, INAMT, OUTAMT, NETINOUT, CURRENCY
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.nantian.domain.PublicDepositChangeKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_public_deposit_change
+    where ACCOUNTNAME = #{accountname,jdbcType=VARCHAR}
+      and GENDATE = #{gendate,jdbcType=DATE}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.PublicDepositChangeKey" >
+    delete from t_public_deposit_change
+    where ACCOUNTNAME = #{accountname,jdbcType=VARCHAR}
+      and GENDATE = #{gendate,jdbcType=DATE}
+  </delete>
+   <delete id="deleteByGendate">
+    delete from t_public_deposit_change
+    where GENDATE = #{gendate,jdbcType=DATE}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.PublicDepositChange" >
+    insert into t_public_deposit_change (ACCOUNTNAME, GENDATE, GENYEAR, 
+      BRANCHID, BRANCHNAME, DQYE, 
+      NCYE, TOLASTDAY, TOLASTYEAR, 
+      SUBCODE, INAMT, OUTAMT, 
+      NETINOUT, CURRENCY)
+    values (#{accountname,jdbcType=VARCHAR}, #{gendate,jdbcType=DATE}, #{genyear,jdbcType=VARCHAR}, 
+      #{branchid,jdbcType=VARCHAR}, #{branchname,jdbcType=VARCHAR}, #{dqye,jdbcType=DOUBLE}, 
+      #{ncye,jdbcType=DOUBLE}, #{tolastday,jdbcType=DOUBLE}, #{tolastyear,jdbcType=DOUBLE}, 
+      #{subcode,jdbcType=VARCHAR}, #{inamt,jdbcType=DOUBLE}, #{outamt,jdbcType=DOUBLE}, 
+      #{netinout,jdbcType=DOUBLE}, #{currency,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.PublicDepositChange" >
+    insert into t_public_deposit_change
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountname != null" >
+        ACCOUNTNAME,
+      </if>
+      <if test="gendate != null" >
+        GENDATE,
+      </if>
+      <if test="genyear != null" >
+        GENYEAR,
+      </if>
+      <if test="branchid != null" >
+        BRANCHID,
+      </if>
+      <if test="branchname != null" >
+        BRANCHNAME,
+      </if>
+      <if test="dqye != null" >
+        DQYE,
+      </if>
+      <if test="ncye != null" >
+        NCYE,
+      </if>
+      <if test="tolastday != null" >
+        TOLASTDAY,
+      </if>
+      <if test="tolastyear != null" >
+        TOLASTYEAR,
+      </if>
+      <if test="subcode != null" >
+        SUBCODE,
+      </if>
+      <if test="inamt != null" >
+        INAMT,
+      </if>
+      <if test="outamt != null" >
+        OUTAMT,
+      </if>
+      <if test="netinout != null" >
+        NETINOUT,
+      </if>
+      <if test="currency != null" >
+        CURRENCY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountname != null" >
+        #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="gendate != null" >
+        #{gendate,jdbcType=DATE},
+      </if>
+      <if test="genyear != null" >
+        #{genyear,jdbcType=VARCHAR},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="branchname != null" >
+        #{branchname,jdbcType=VARCHAR},
+      </if>
+      <if test="dqye != null" >
+        #{dqye,jdbcType=DOUBLE},
+      </if>
+      <if test="ncye != null" >
+        #{ncye,jdbcType=DOUBLE},
+      </if>
+      <if test="tolastday != null" >
+        #{tolastday,jdbcType=DOUBLE},
+      </if>
+      <if test="tolastyear != null" >
+        #{tolastyear,jdbcType=DOUBLE},
+      </if>
+      <if test="subcode != null" >
+        #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="inamt != null" >
+        #{inamt,jdbcType=DOUBLE},
+      </if>
+      <if test="outamt != null" >
+        #{outamt,jdbcType=DOUBLE},
+      </if>
+      <if test="netinout != null" >
+        #{netinout,jdbcType=DOUBLE},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.PublicDepositChange" >
+    update t_public_deposit_change
+    <set >
+      <if test="genyear != null" >
+        GENYEAR = #{genyear,jdbcType=VARCHAR},
+      </if>
+      <if test="branchid != null" >
+        BRANCHID = #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="branchname != null" >
+        BRANCHNAME = #{branchname,jdbcType=VARCHAR},
+      </if>
+      <if test="dqye != null" >
+        DQYE = #{dqye,jdbcType=DOUBLE},
+      </if>
+      <if test="ncye != null" >
+        NCYE = #{ncye,jdbcType=DOUBLE},
+      </if>
+      <if test="tolastday != null" >
+        TOLASTDAY = #{tolastday,jdbcType=DOUBLE},
+      </if>
+      <if test="tolastyear != null" >
+        TOLASTYEAR = #{tolastyear,jdbcType=DOUBLE},
+      </if>
+      <if test="subcode != null" >
+        SUBCODE = #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="inamt != null" >
+        INAMT = #{inamt,jdbcType=DOUBLE},
+      </if>
+      <if test="outamt != null" >
+        OUTAMT = #{outamt,jdbcType=DOUBLE},
+      </if>
+      <if test="netinout != null" >
+        NETINOUT = #{netinout,jdbcType=DOUBLE},
+      </if>
+      <if test="currency != null" >
+        CURRENCY = #{currency,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ACCOUNTNAME = #{accountname,jdbcType=VARCHAR}
+      and GENDATE = #{gendate,jdbcType=DATE}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.PublicDepositChange" >
+    update t_public_deposit_change
+    set GENYEAR = #{genyear,jdbcType=VARCHAR},
+      BRANCHID = #{branchid,jdbcType=VARCHAR},
+      BRANCHNAME = #{branchname,jdbcType=VARCHAR},
+      DQYE = #{dqye,jdbcType=DOUBLE},
+      NCYE = #{ncye,jdbcType=DOUBLE},
+      TOLASTDAY = #{tolastday,jdbcType=DOUBLE},
+      TOLASTYEAR = #{tolastyear,jdbcType=DOUBLE},
+      SUBCODE = #{subcode,jdbcType=VARCHAR},
+      INAMT = #{inamt,jdbcType=DOUBLE},
+      OUTAMT = #{outamt,jdbcType=DOUBLE},
+      NETINOUT = #{netinout,jdbcType=DOUBLE},
+      CURRENCY = #{currency,jdbcType=VARCHAR}
+    where ACCOUNTNAME = #{accountname,jdbcType=VARCHAR}
+      and GENDATE = #{gendate,jdbcType=DATE}
+  </update>
+</mapper>

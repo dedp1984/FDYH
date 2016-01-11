@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nantian.dao.PersonPledgeAccountMapper">
+  <resultMap id="BaseResultMap" type="com.nantian.domain.PersonPledgeAccount">
+    <id column="SALEID" jdbcType="VARCHAR" property="saleid" />
+    <result column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <result column="TRANAMT" jdbcType="DOUBLE" property="tranamt" />
+    <result column="STARTDATE" jdbcType="DATE" property="startdate" />
+    <result column="ENDDATE" jdbcType="DATE" property="enddate" />
+    <result column="LASTMODIFYBRANCHID" jdbcType="VARCHAR" property="lastmodifybranchid" />
+    <result column="LASTMODIFYACCTID" jdbcType="VARCHAR" property="lastmodifyacctid" />
+    <result column="LASTMODIFYDATE" jdbcType="DATE" property="lastmodifydate" />
+    <association column="accountid" property="baseAccount" select="selectBaseAccount"></association>
+    <collection  column="accountid" ofType="java.util.HashMap" property="binds" select="selectAccountBinds" />
+  </resultMap>
+  
+  <!-- 查询账户绑定关系 -->
+   <resultMap id="BindsResult" type="java.util.HashMap">
+    <id column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <id column="MANAGERID" jdbcType="VARCHAR" property="managerid" />
+    <result column="PERCENT" jdbcType="DOUBLE" property="percent" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
+    <result column="BRANCHNAME" jdbcType="VARCHAR" property="branchname" />
+  </resultMap>
+  <select id="selectAccountBinds" parameterType="String" resultMap="BindsResult">
+  	select   *  from t_manager_account  a  
+  	left  join  sys_account b on a.managerid=b.accountid    
+  	left join sys_branch c on b.branchid=c.branchid  where a.accountid=#{accountid}
+  </select>
+  
+  <!-- 查询账户关联信息 -->
+  <resultMap id="BaseAccountResult" type="com.nantian.domain.BaseAccount">
+    <id column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <result column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
+    <result column="ACCOUNTNAME" jdbcType="VARCHAR" property="accountname" />
+    <result column="ACCOUNTTYPE" jdbcType="VARCHAR" property="accounttype" />
+    <result column="MACCOUNTID" jdbcType="VARCHAR" property="maccountid" />
+    <result column="CUSTOMNO" jdbcType="VARCHAR" property="customno" />
+    <result column="CURRENCY" jdbcType="VARCHAR" property="currency" />
+    <result column="OPENDATE" jdbcType="DATE" property="opendate" />
+    <result column="ENDDATE" jdbcType="DATE" property="enddate" />
+    <result column="SUBCODE" jdbcType="VARCHAR" property="subcode" />
+    <result column="PROPERTY" jdbcType="VARCHAR" property="property" />
+    <result column="ACCTSTATUS" jdbcType="VARCHAR" property="acctstatus" />
+    <result column="SUBACCTTYPE" jdbcType="VARCHAR" property="subaccttype" />
+    <association column="branchid" property="branch" select="selectBranch" />
+  </resultMap>
+  <select id="selectBaseAccount" parameterType="String" resultMap="BaseAccountResult">
+      select *  from t_account_base where accountid=#{accountid}
+  </select>
+  
+  <!-- 查询机构信息 -->
+   <resultMap id="SysBranchResult" type="com.nantian.domain.SysBranch">
+    <id column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
+    <result column="BRANCHNAME" jdbcType="VARCHAR" property="branchname" />
+    <result column="PARENTID" jdbcType="VARCHAR" property="parentid" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="ALIAS" jdbcType="VARCHAR" property="alias" />
+  </resultMap>
+  <select id="selectBranch" parameterType="String" resultMap="SysBranchResult">
+  	select * from SYS_BRANCH where 1=1 and  BRANCHID=#{branchid}
+  </select>
+  
+  <sql id="Base_Column_List">
+    SALEID, ACCOUNTID, TRANAMT, STARTDATE, ENDDATE, LASTMODIFYBRANCHID, LASTMODIFYACCTID, 
+    LASTMODIFYDATE
+  </sql>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+     select 
+		a.*
+	from t_account_person_pledge  a
+
+	left join t_account_base  b on  a.accountid=b.accountid
+
+	left join t_manager_account c on a.accountid=c.accountid
+
+	left join sys_account d on c.managerid=d.accountid
+
+	where 1=1  and lastmodifybranchid=#{modifybranch} and lastmodifyacctid=#{modifyuser}
+	<if test="accountid!=null and accountid!=''">
+	    and a.accountid like CONCAT(CONCAT('%',#{accountid}),'%')
+	</if>
+	<if test="accountname !=null and accountname!=''">
+	    and b.accountname like CONCAT(CONCAT('%',#{accountname}),'%')
+	</if>
+	<if test="tobranchid!=null and tobranchid!=''">
+	    and d.branchid=#{tobranchid}
+	</if>
+	<if test="tomanagerid!=null and tomanagerid!=''">
+	    and d.accountid=#{tomanagerid}
+	</if>
+	group by a.saleid
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_account_person_pledge
+    where SALEID = #{saleid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_account_person_pledge
+    where SALEID = #{saleid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.PersonPledgeAccount">
+    insert into t_account_person_pledge (SALEID, ACCOUNTID, TRANAMT, 
+      STARTDATE, ENDDATE, LASTMODIFYBRANCHID, 
+      LASTMODIFYACCTID, LASTMODIFYDATE)
+    values (#{saleid,jdbcType=VARCHAR}, #{accountid,jdbcType=VARCHAR}, #{tranamt,jdbcType=DOUBLE}, 
+      #{startdate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, #{lastmodifybranchid,jdbcType=VARCHAR}, 
+      #{lastmodifyacctid,jdbcType=VARCHAR}, #{lastmodifydate,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.PersonPledgeAccount">
+    insert into t_account_person_pledge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="saleid != null">
+        SALEID,
+      </if>
+      <if test="accountid != null">
+        ACCOUNTID,
+      </if>
+      <if test="tranamt != null">
+        TRANAMT,
+      </if>
+      <if test="startdate != null">
+        STARTDATE,
+      </if>
+      <if test="enddate != null">
+        ENDDATE,
+      </if>
+      <if test="lastmodifybranchid != null">
+        LASTMODIFYBRANCHID,
+      </if>
+      <if test="lastmodifyacctid != null">
+        LASTMODIFYACCTID,
+      </if>
+      <if test="lastmodifydate != null">
+        LASTMODIFYDATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="saleid != null">
+        #{saleid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountid != null">
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="tranamt != null">
+        #{tranamt,jdbcType=DOUBLE},
+      </if>
+      <if test="startdate != null">
+        #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null">
+        #{enddate,jdbcType=DATE},
+      </if>
+      <if test="lastmodifybranchid != null">
+        #{lastmodifybranchid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyacctid != null">
+        #{lastmodifyacctid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifydate != null">
+        #{lastmodifydate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.PersonPledgeAccount">
+    update t_account_person_pledge
+    <set>
+      <if test="accountid != null">
+        ACCOUNTID = #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="tranamt != null">
+        TRANAMT = #{tranamt,jdbcType=DOUBLE},
+      </if>
+      <if test="startdate != null">
+        STARTDATE = #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null">
+        ENDDATE = #{enddate,jdbcType=DATE},
+      </if>
+      <if test="lastmodifybranchid != null">
+        LASTMODIFYBRANCHID = #{lastmodifybranchid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyacctid != null">
+        LASTMODIFYACCTID = #{lastmodifyacctid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifydate != null">
+        LASTMODIFYDATE = #{lastmodifydate,jdbcType=DATE},
+      </if>
+    </set>
+    where SALEID = #{saleid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.PersonPledgeAccount">
+    update t_account_person_pledge
+    set ACCOUNTID = #{accountid,jdbcType=VARCHAR},
+      TRANAMT = #{tranamt,jdbcType=DOUBLE},
+      STARTDATE = #{startdate,jdbcType=DATE},
+      ENDDATE = #{enddate,jdbcType=DATE},
+      LASTMODIFYBRANCHID = #{lastmodifybranchid,jdbcType=VARCHAR},
+      LASTMODIFYACCTID = #{lastmodifyacctid,jdbcType=VARCHAR},
+      LASTMODIFYDATE = #{lastmodifydate,jdbcType=DATE}
+    where SALEID = #{saleid,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

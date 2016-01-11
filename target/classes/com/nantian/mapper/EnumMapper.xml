@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.EnumMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.Enum" >
+    <id column="TYPE" property="type" jdbcType="VARCHAR" />
+    <id column="VALUE" property="value" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TYPE, VALUE, NAME
+  </sql>
+  <select id="selectListByType" resultMap="BaseResultMap" parameterType="String">
+      select 
+      <include refid="Base_Column_List" />
+      from t_enum where type=#{type}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.nantian.domain.EnumKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_enum
+    where TYPE = #{type,jdbcType=VARCHAR}
+      and VALUE = #{value,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.EnumKey" >
+    delete from t_enum
+    where TYPE = #{type,jdbcType=VARCHAR}
+      and VALUE = #{value,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.Enum" >
+    insert into t_enum (TYPE, VALUE, NAME
+      )
+    values (#{type,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.Enum" >
+    insert into t_enum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="value != null" >
+        VALUE,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.Enum" >
+    update t_enum
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TYPE = #{type,jdbcType=VARCHAR}
+      and VALUE = #{value,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.Enum" >
+    update t_enum
+    set NAME = #{name,jdbcType=VARCHAR}
+    where TYPE = #{type,jdbcType=VARCHAR}
+      and VALUE = #{value,jdbcType=VARCHAR}
+  </update>
+</mapper>

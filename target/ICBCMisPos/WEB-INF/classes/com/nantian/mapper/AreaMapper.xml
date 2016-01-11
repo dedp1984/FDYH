@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.AreaMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.Area" >
+    <id column="AREAID" property="areaid" jdbcType="VARCHAR" />
+    <result column="BRANCHID" property="branchid" jdbcType="VARCHAR" />
+    <result column="AREANAME" property="areaname" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="AREAINFO" property="areainfo" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="LASTMODIFYUSER" property="lastmodifyuser" jdbcType="VARCHAR" />
+    <result column="LASTMODIFYDATE" property="lastmodifydate" jdbcType="VARCHAR" />
+    <association property="branch" select="selectAccountBranch" column="branchid"></association>
+  </resultMap>
+  <resultMap type="com.nantian.domain.SysBranch"  id="SysBranchResult">
+    <id column="BRANCHID" property="branchid" jdbcType="VARCHAR" />
+    <result column="BRANCHNAME" property="branchname" jdbcType="VARCHAR" />
+    <result column="PARENTID" property="parentid" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="ALIAS" property="alias" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectAccountBranch" parameterType="String" resultMap="SysBranchResult">
+  	select * from SYS_BRANCH where 1=1 and  BRANCHID=#{branchid}
+  </select>
+  <sql id="Base_Column_List" >
+    AREAID,BRANCHID, AREANAME, ADDRESS, AREAINFO, PHONE, LASTMODIFYUSER, LASTMODIFYDATE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_AREA
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAreaList" parameterType="com.nantian.domain.Area" resultMap="BaseResultMap" >
+	select * from t_area where 1=1
+	<if test="areaid != null and areaid!=''">
+		AND AREAID=#{areaid,jdbcType=VARCHAR}
+	</if>
+	<if test="branchid != null and areaid!=''">
+		AND BRANCHID=#{branchid,jdbcType=VARCHAR}
+	</if>
+	<if test="areaname != null and areaname!=''">
+		AND AREANAME like CONCAT(CONCAT('%',#{areaname,jdbcType=VARCHAR}),'%')
+	</if>
+	<if test="address != null and address!=''">
+		AND ADDRESS like CONCAT(CONCAT('%',#{address,jdbcType=VARCHAR}),'%')
+	</if>
+	<if test="areainfo != null and areainfo!=''">
+		AND AREAINFO like CONCAT(CONCAT('%',#{areainfo,jdbcType=VARCHAR}),'%')
+	</if>
+	<if test="phone != null and phone!=''">
+		AND PHONE like CONCAT(CONCAT('%',#{phone,jdbcType=VARCHAR}),'%')
+	</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_AREA
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.Area" >
+    insert into T_AREA (AREAID, BRANCHID,AREANAME, ADDRESS, 
+      AREAINFO, PHONE, LASTMODIFYUSER, 
+      LASTMODIFYDATE)
+    values (#{areaid,jdbcType=VARCHAR}, #{branchid,jdbcType=VARCHAR}, #{areaname,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{areainfo,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{lastmodifyuser,jdbcType=VARCHAR}, 
+      #{lastmodifydate,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.Area" >
+    insert into T_AREA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="areaid != null" >
+        AREAID,
+      </if>
+      <if test="branchid != null" >
+        BRANCHID,
+      </if>
+      <if test="areaname != null" >
+        AREANAME,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="areainfo != null" >
+        AREAINFO,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="lastmodifyuser != null" >
+        LASTMODIFYUSER,
+      </if>
+      <if test="lastmodifydate != null" >
+        LASTMODIFYDATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="areaid != null" >
+        #{areaid,jdbcType=VARCHAR},
+      </if>
+       <if test="branchid != null" >
+        #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="areaname != null" >
+        #{areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="areainfo != null" >
+        #{areainfo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyuser != null" >
+        #{lastmodifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifydate != null" >
+        #{lastmodifydate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.Area" >
+    update T_AREA
+    <set >
+     	<if test="branchid != null" >
+        BRANCHID = #{branchid,jdbcType=VARCHAR},
+      	</if>
+      <if test="areaname != null" >
+        AREANAME = #{areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="areainfo != null" >
+        AREAINFO = #{areainfo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyuser != null" >
+        LASTMODIFYUSER = #{lastmodifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifydate != null" >
+        LASTMODIFYDATE = #{lastmodifydate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.Area" >
+    update T_AREA
+    set BRANCHID = #{branchid,jdbcType=VARCHAR},
+    	AREANAME = #{areaname,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      AREAINFO = #{areainfo,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      LASTMODIFYUSER = #{lastmodifyuser,jdbcType=VARCHAR},
+      LASTMODIFYDATE = #{lastmodifydate,jdbcType=VARCHAR}
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+  </update>
+</mapper>

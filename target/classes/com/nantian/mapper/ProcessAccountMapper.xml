@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.ProcessAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.ProcessAccount" >
+    <id column="ACCOUNTID" property="accountid" jdbcType="VARCHAR" />
+    <result column="BRANCHID" property="branchid" jdbcType="VARCHAR" />
+    <result column="ACCOUNTNAME" property="accountname" jdbcType="VARCHAR" />
+    <result column="ACCOUNTTYPE" property="accounttype" jdbcType="VARCHAR" />
+    <result column="MACCOUNTID" property="maccountid" jdbcType="VARCHAR" />
+    <result column="CUSTOMNO" property="customno" jdbcType="VARCHAR" />
+    <result column="CURRENCY" property="currency" jdbcType="VARCHAR" />
+    <result column="OPENDATE" property="opendate" jdbcType="DATE" />
+    <result column="ENDDATE" property="enddate" jdbcType="DATE" />
+    <result column="SUBCODE" property="subcode" jdbcType="VARCHAR" />
+    <result column="PROPERTY" property="property" jdbcType="VARCHAR" />
+    <result column="ACCTSTATUS" property="acctstatus" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="SUBMITID" property="submitid" jdbcType="VARCHAR" />
+    <result column="SUBMITDATE" property="submitdate" jdbcType="DATE" />
+    <result column="CHECKID" property="checkid" jdbcType="VARCHAR" />
+    <result column="CHECKDATE" property="checkdate" jdbcType="DATE" />
+    <result column="REFUSEREASON" property="refusereason" jdbcType="VARCHAR" />
+    <association property="branch" select="selectBranch" column="branchid"></association>
+    <collection property="binds" select="selectAccountBinds" column="accountid" ofType="com.nantian.domain.ProcessBind"></collection>
+  </resultMap>
+   <resultMap id="ProcessBindResult" type="com.nantian.domain.ProcessBind" >
+    <id column="ACCOUNTID" property="accountid" jdbcType="VARCHAR" />
+    <id column="MANAGERID" property="managerid" jdbcType="VARCHAR" />
+    <result column='ACCOUNTNAME' property='managername' jdbcType='VARCHAR'/>
+    <result column="PERCENT" property="percent" jdbcType="DOUBLE" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="BRANCHID" property="branchid" jdbcType="VARCHAR"/>
+    <result column="BRANCHNAME" property="branchname" jdbcType="VARCHAR"/>
+  </resultMap>
+   <select id="selectAccountBinds" parameterType="String" resultMap="ProcessBindResult">
+  	select * from t_process_bind a 
+  	left  join  sys_account b on a.managerid=b.accountid    
+  	left join sys_branch c on b.branchid=c.branchid  where a.accountid=#{accountid}
+  </select>
+   <resultMap type="com.nantian.domain.SysBranch"  id="SysBranchResult">
+    <id column="BRANCHID" property="branchid" jdbcType="VARCHAR" />
+    <result column="BRANCHNAME" property="branchname" jdbcType="VARCHAR" />
+    <result column="PARENTID" property="parentid" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="ALIAS" property="alias" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectBranch" parameterType="String" resultMap="SysBranchResult">
+  	select * from SYS_BRANCH where 1=1 and  BRANCHID=#{branchid}
+  </select>
+  <sql id="Base_Column_List" >
+    ACCOUNTID, BRANCHID, ACCOUNTNAME, ACCOUNTTYPE, MACCOUNTID, CUSTOMNO, CURRENCY, OPENDATE, 
+    ENDDATE, SUBCODE, PROPERTY, ACCTSTATUS, STATUS, SUBMITID, SUBMITDATE, CHECKID, CHECKDATE, 
+    REFUSEREASON
+  </sql>
+   <select id="selectUnCheckAccountList" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_process_account where 1=1 
+    <if test="accountid != null and accountid!=''" >
+        and ACCOUNTID like CONCAT(CONCAT('%',#{accountid}),'%')
+    </if>
+     <if test="accountname != null and accountname!=''" >
+        and ACCOUNTNAME like CONCAT(CONCAT('%',#{accountname}),'%')
+    </if>
+    <if test="accounttype != null and accounttype !=''" >
+        and ACCOUNTTYPE = #{accounttype}
+    </if>
+    <if test="status != null and status !=''" >
+        and STATUS =#{status}
+    </if>
+    <if test="submitid != null and submitid !=''" >
+        and submitid =#{submitid}
+    </if>
+    <if test="checkid != null and checkid !=''" >
+        and checkid =#{checkid}
+    </if>
+    <if test="list !=null">
+         and accounttype in 
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_process_account
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_process_account
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.ProcessAccount" >
+    insert into t_process_account (ACCOUNTID, BRANCHID, ACCOUNTNAME, 
+      ACCOUNTTYPE, MACCOUNTID, CUSTOMNO, 
+      CURRENCY, OPENDATE, ENDDATE, 
+      SUBCODE, PROPERTY, ACCTSTATUS, 
+      STATUS, SUBMITID, SUBMITDATE, 
+      CHECKID, CHECKDATE, REFUSEREASON
+      )
+    values (#{accountid,jdbcType=VARCHAR}, #{branchid,jdbcType=VARCHAR}, #{accountname,jdbcType=VARCHAR}, 
+      #{accounttype,jdbcType=VARCHAR}, #{maccountid,jdbcType=VARCHAR}, #{customno,jdbcType=VARCHAR}, 
+      #{currency,jdbcType=VARCHAR}, #{opendate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, 
+      #{subcode,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR}, #{acctstatus,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{submitid,jdbcType=VARCHAR}, #{submitdate,jdbcType=DATE}, 
+      #{checkid,jdbcType=VARCHAR}, #{checkdate,jdbcType=DATE}, #{refusereason,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.ProcessAccount" >
+    insert into t_process_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        ACCOUNTID,
+      </if>
+      <if test="branchid != null" >
+        BRANCHID,
+      </if>
+      <if test="accountname != null" >
+        ACCOUNTNAME,
+      </if>
+      <if test="accounttype != null" >
+        ACCOUNTTYPE,
+      </if>
+      <if test="maccountid != null" >
+        MACCOUNTID,
+      </if>
+      <if test="customno != null" >
+        CUSTOMNO,
+      </if>
+      <if test="currency != null" >
+        CURRENCY,
+      </if>
+      <if test="opendate != null" >
+        OPENDATE,
+      </if>
+      <if test="enddate != null" >
+        ENDDATE,
+      </if>
+      <if test="subcode != null" >
+        SUBCODE,
+      </if>
+      <if test="property != null" >
+        PROPERTY,
+      </if>
+      <if test="acctstatus != null" >
+        ACCTSTATUS,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="submitid != null" >
+        SUBMITID,
+      </if>
+      <if test="submitdate != null" >
+        SUBMITDATE,
+      </if>
+      <if test="checkid != null" >
+        CHECKID,
+      </if>
+      <if test="checkdate != null" >
+        CHECKDATE,
+      </if>
+      <if test="refusereason != null" >
+        REFUSEREASON,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null" >
+        #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="maccountid != null" >
+        #{maccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="customno != null" >
+        #{customno,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="opendate != null" >
+        #{opendate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        #{enddate,jdbcType=DATE},
+      </if>
+      <if test="subcode != null" >
+        #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null" >
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="acctstatus != null" >
+        #{acctstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="submitid != null" >
+        #{submitid,jdbcType=VARCHAR},
+      </if>
+      <if test="submitdate != null" >
+        #{submitdate,jdbcType=DATE},
+      </if>
+      <if test="checkid != null" >
+        #{checkid,jdbcType=VARCHAR},
+      </if>
+      <if test="checkdate != null" >
+        #{checkdate,jdbcType=DATE},
+      </if>
+      <if test="refusereason != null" >
+        #{refusereason,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.ProcessAccount" >
+    update t_process_account
+    <set >
+      <if test="branchid != null" >
+        BRANCHID = #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null" >
+        ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        ACCOUNTTYPE = #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="maccountid != null" >
+        MACCOUNTID = #{maccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="customno != null" >
+        CUSTOMNO = #{customno,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        CURRENCY = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="opendate != null" >
+        OPENDATE = #{opendate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        ENDDATE = #{enddate,jdbcType=DATE},
+      </if>
+      <if test="subcode != null" >
+        SUBCODE = #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null" >
+        PROPERTY = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="acctstatus != null" >
+        ACCTSTATUS = #{acctstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="submitid != null" >
+        SUBMITID = #{submitid,jdbcType=VARCHAR},
+      </if>
+      <if test="submitdate != null" >
+        SUBMITDATE = #{submitdate,jdbcType=DATE},
+      </if>
+      <if test="checkid != null" >
+        CHECKID = #{checkid,jdbcType=VARCHAR},
+      </if>
+      <if test="checkdate != null" >
+        CHECKDATE = #{checkdate,jdbcType=DATE},
+      </if>
+      <if test="refusereason != null" >
+        REFUSEREASON = #{refusereason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.ProcessAccount" >
+    update t_process_account
+    set BRANCHID = #{branchid,jdbcType=VARCHAR},
+      ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      ACCOUNTTYPE = #{accounttype,jdbcType=VARCHAR},
+      MACCOUNTID = #{maccountid,jdbcType=VARCHAR},
+      CUSTOMNO = #{customno,jdbcType=VARCHAR},
+      CURRENCY = #{currency,jdbcType=VARCHAR},
+      OPENDATE = #{opendate,jdbcType=DATE},
+      ENDDATE = #{enddate,jdbcType=DATE},
+      SUBCODE = #{subcode,jdbcType=VARCHAR},
+      PROPERTY = #{property,jdbcType=VARCHAR},
+      ACCTSTATUS = #{acctstatus,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      SUBMITID = #{submitid,jdbcType=VARCHAR},
+      SUBMITDATE = #{submitdate,jdbcType=DATE},
+      CHECKID = #{checkid,jdbcType=VARCHAR},
+      CHECKDATE = #{checkdate,jdbcType=DATE},
+      REFUSEREASON = #{refusereason,jdbcType=VARCHAR}
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.DeviceMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.Device" >
+    <id column="AREAID" property="areaid" jdbcType="VARCHAR" />
+    <id column="DEVID" property="devid" jdbcType="VARCHAR" />
+    <id column="ENTRYID" property="entryid" jdbcType="VARCHAR" />
+    <result column="DEVNAME" property="devname" jdbcType="VARCHAR" />
+    <result column="ADRZONEID" property="adrzoneid" jdbcType="VARCHAR" />
+    <result column="IOSZONEID" property="ioszoneid" jdbcType="VARCHAR" />
+    <result column="DEVADDRESS" property="devaddress" jdbcType="VARCHAR" />
+    <result column="LASTMODIFYUSER" property="lastmodifyuser" jdbcType="VARCHAR" />
+    <result column="LASTMODIFYTIME" property="lastmodifytime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    AREAID, DEVID, ENTRYID, DEVNAME, ADRZONEID, IOSZONEID, DEVADDRESS,LASTMODIFYUSER, LASTMODIFYTIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.nantian.domain.DeviceKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_DEVICE
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+      and DEVID = #{devid,jdbcType=VARCHAR}
+      and ENTRYID = #{entryid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectDeviceList" parameterType="com.nantian.domain.Device"  resultMap="BaseResultMap">
+    select * from t_device where 1=1
+      <if test="areaid != null and areaid!=''" >
+        AND AREAID=#{areaid}
+      </if>
+      <if test="devid != null and devid!=''" >
+        AND DEVID=#{devid}
+      </if>
+      <if test="entryid != null and entryid!=''" >
+        AND ENTRYID=#{entryid}
+      </if>
+      <if test="devname != null and devname!=''" >
+        AND DEVNAME=#{devname}
+      </if>
+      <if test="adrzoneid != null and adrzoneid!=''" >
+        AND ADRZONEID=#{adrzoneid}
+      </if>
+      <if test="ioszoneid != null and ioszoneid!=''" >
+        AND IOSZONEID=#{ioszoneid}
+      </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.DeviceKey" >
+    delete from T_DEVICE
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+      and DEVID = #{devid,jdbcType=VARCHAR}
+      and ENTRYID = #{entryid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.Device" >
+    insert into T_DEVICE (AREAID, DEVID, ENTRYID, 
+      DEVNAME, ADRZONEID, IOSZONEID, DEVADDRESS
+      LASTMODIFYUSER, LASTMODIFYTIME)
+    values (#{areaid,jdbcType=VARCHAR}, #{devid,jdbcType=VARCHAR}, #{entryid,jdbcType=VARCHAR}, 
+      #{devname,jdbcType=VARCHAR}, #{adrzoneid,jdbcType=VARCHAR}, #{ioszoneid,jdbcType=VARCHAR},  #{devaddress,jdbcType=VARCHAR}, 
+      #{lastmodifyuser,jdbcType=VARCHAR}, #{lastmodifytime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.Device" >
+    insert into T_DEVICE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="areaid != null" >
+        AREAID,
+      </if>
+      <if test="devid != null" >
+        DEVID,
+      </if>
+      <if test="entryid != null" >
+        ENTRYID,
+      </if>
+      <if test="devname != null" >
+        DEVNAME,
+      </if>
+      <if test="adrzoneid != null" >
+        ADRZONEID,
+      </if>
+      <if test="ioszoneid != null" >
+        IOSZONEID,
+      </if>
+      <if test="devaddress != null" >
+        DEVADDRESS,
+      </if>
+      <if test="lastmodifyuser != null" >
+        LASTMODIFYUSER,
+      </if>
+      <if test="lastmodifytime != null" >
+        LASTMODIFYTIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="areaid != null" >
+        #{areaid,jdbcType=VARCHAR},
+      </if>
+      <if test="devid != null" >
+        #{devid,jdbcType=VARCHAR},
+      </if>
+      <if test="entryid != null" >
+        #{entryid,jdbcType=VARCHAR},
+      </if>
+      <if test="devname != null" >
+        #{devname,jdbcType=VARCHAR},
+      </if>
+      <if test="adrzoneid != null" >
+        #{adrzoneid,jdbcType=VARCHAR},
+      </if>
+      <if test="ioszoneid != null" >
+        #{ioszoneid,jdbcType=VARCHAR},
+      </if>
+       <if test="devaddress != null" >
+        #{devaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyuser != null" >
+        #{lastmodifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifytime != null" >
+        #{lastmodifytime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.Device" >
+    update T_DEVICE
+    <set >
+      <if test="devname != null" >
+        DEVNAME = #{devname,jdbcType=VARCHAR},
+      </if>
+      <if test="adrzoneid != null" >
+        ADRZONEID = #{adrzoneid,jdbcType=VARCHAR},
+      </if>
+      <if test="ioszoneid != null" >
+        IOSZONEID = #{ioszoneid,jdbcType=VARCHAR},
+      </if>
+      <if test="devaddress != null" >
+        DEVADDRESS = #{devaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyuser != null" >
+        LASTMODIFYUSER = #{lastmodifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifytime != null" >
+        LASTMODIFYTIME = #{lastmodifytime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+      and DEVID = #{devid,jdbcType=VARCHAR}
+      and ENTRYID = #{entryid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.Device" >
+    update T_DEVICE
+    set DEVNAME = #{devname,jdbcType=VARCHAR},
+      ADRZONEID = #{adrzoneid,jdbcType=VARCHAR},
+      IOSZONEID = #{ioszoneid,jdbcType=VARCHAR},
+      DEVADDRESS = #{devaddress,jdbcType=VARCHAR},
+      LASTMODIFYUSER = #{lastmodifyuser,jdbcType=VARCHAR},
+      LASTMODIFYTIME = #{lastmodifytime,jdbcType=VARCHAR}
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+      and DEVID = #{devid,jdbcType=VARCHAR}
+      and ENTRYID = #{entryid,jdbcType=VARCHAR}
+  </update>
+</mapper>

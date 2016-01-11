@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry
+		location="E:\workspace\J2EE\FDYH\target\FDYH\WEB-INF\lib\mysql-connector-java-5.1.35.jar" />
+		
+	
+	<context id="mysqlMybatis"  defaultModelType="conditional" >
+		<commentGenerator>
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+			<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://192.168.0.101:3306/asdcloud?characterEncoding=UTF-8" userId="asd"
+			password="asd" />
+		<javaModelGenerator targetPackage="com.nantian.domain"
+			targetProject="FDYH/src/main/java" />
+		<sqlMapGenerator targetPackage="com.nantian.mapper"
+			targetProject="FDYH/src/main/java" />
+		<javaClientGenerator targetPackage="com.nantian.dao"
+			targetProject="FDYH/src/main/java" type="XMLMAPPER" />
+		<!--  
+		<table tableName="SYS_ACCOUNT" domainObjectName="SysAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="SYS_ACCOUNT_ROLE" domainObjectName="SysAccountRole" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		<table tableName="SYS_BRANCH" domainObjectName="SysBranch" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		<table tableName="SYS_MENU" domainObjectName="SysMenu" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="SYS_ROLE" domainObjectName="SysRole" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="SYS_ROLE_MENU" domainObjectName="SysRoleMenu" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		
+		
+		<table tableName="T_ACCOUNT_PUBLIC_CURRENT" domainObjectName="PublicCurrentAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		<table tableName="T_ACCOUNT_PUBLIC_FIXED" domainObjectName="PublicFixedAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		<table tableName="T_ACCOUNT_PUBLIC_CREDIT" domainObjectName="PublicCreditAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		<table tableName="T_ACCOUNT_DAY_AVERAGE" domainObjectName="AccountDayAverage" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		
+		
+		
+		<table tableName="T_MANAGER_ACCOUNT" domainObjectName="BindAccountToManager" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_PROCESS_BIND" domainObjectName="ProcessBind" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_FINANCE_PRODUCT_TYPE" domainObjectName="FinanceProductType" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+	
+		<table tableName="T_NOBINDACCOUNT" domainObjectName="NoBindAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_ACCOUNT_PERSON_FIXED" domainObjectName="PersonFixedAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_ACCOUNT_PERSON_CURRENT" domainObjectName="PersonCurrentAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_ENUM" domainObjectName="Enum" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>		
+		
+		<table tableName="SYS_ACCOUNT_FEATURE" domainObjectName="SysAccountFeature" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		
+		
+		<table tableName="T_IMPORT_RECORD" domainObjectName="ImportRecord" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_PUBLIC_DEPOSIT_CHANGE" domainObjectName="PublicDepositChange" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+	
+		
+		<table tableName="T_PROCESS_ACCOUNT" domainObjectName="ProcessAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		<table tableName="T_NOBINDACCOUNT" domainObjectName="NoBindAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_ACCOUNTBAL_RECORD" domainObjectName="AccountBalRecord" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_FINANCE_DETAIL" domainObjectName="FinanceDetail" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="T_ACCOUNT_BASE" domainObjectName="BaseAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			
+		<table tableName="T_ACCOUNT_PERSON_PLEDGE" domainObjectName="PersonPledgeAccount" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+		-->
+		<table tableName="T_BRANCH_PUBACCT" domainObjectName="BranchPubAcct" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+		</table>
+	</context>
+</generatorConfiguration>

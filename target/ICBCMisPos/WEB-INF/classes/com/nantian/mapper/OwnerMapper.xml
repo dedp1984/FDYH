@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.OwnerMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.Owner" >
+    <id column="OWNERID" property="ownerid" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OWNERID, PASSWORD, CREATETIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_OWNER
+    where OWNERID = #{ownerid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectOwnerList" resultMap="BaseResultMap" parameterType="com.nantian.domain.Owner" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_OWNER
+    where 1=1 
+    <if test="ownerid !=null and ownerid!=''">
+    AND OWNERID like CONCAT(CONCAT('%',#{ownerid,jdbcType=VARCHAR}),'%')
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_OWNER
+    where OWNERID = #{ownerid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.Owner" >
+    insert into T_OWNER (OWNERID, PASSWORD, CREATETIME
+      )
+    values (#{ownerid,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{createtime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.Owner" >
+    insert into T_OWNER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ownerid != null" >
+        OWNERID,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ownerid != null" >
+        #{ownerid,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.Owner" >
+    update T_OWNER
+    <set >
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OWNERID = #{ownerid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.Owner" >
+    update T_OWNER
+    set PASSWORD = #{password,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=VARCHAR}
+    where OWNERID = #{ownerid,jdbcType=VARCHAR}
+  </update>
+</mapper>

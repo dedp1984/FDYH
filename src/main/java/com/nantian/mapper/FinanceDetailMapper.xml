@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nantian.dao.FinanceDetailMapper">
+  <resultMap id="BaseResultMap" type="com.nantian.domain.FinanceDetail">
+    <id column="SALEID" jdbcType="VARCHAR" property="saleid" />
+    <result column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
+    <result column="PRODUCTID" jdbcType="VARCHAR" property="productid" />
+    <result column="PRODUCTBATCH" jdbcType="VARCHAR" property="productbatch" />
+    <result column="TRANAMT" jdbcType="DOUBLE" property="tranamt" />
+    <result column="YEARDAYAVG" jdbcType="DOUBLE" property="yeardayavg" />
+    <result column="STARTDATE" jdbcType="DATE" property="startdate" />
+    <result column="ENDDATE" jdbcType="DATE" property="enddate" />
+    <result column="CHANNEL" jdbcType="VARCHAR" property="channel" />
+    <result column="LASTMODIFYID" jdbcType="VARCHAR" property="lastmodifyid" />
+    <result column="LASTMODIFYDATE" jdbcType="DATE" property="lastmodifydate" />
+    <result column="ISZY" jdbcType="VARCHAR" property="iszy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SALEID, ACCOUNTID, PRODUCTID, PRODUCTBATCH, TRANAMT, YEARDAYAVG, STARTDATE, ENDDATE, 
+    CHANNEL, LASTMODIFYID, LASTMODIFYDATE, ISZY
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_finance_detail
+    where SALEID = #{saleid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_finance_detail
+    where SALEID = #{saleid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.FinanceDetail">
+    insert into t_finance_detail (SALEID, ACCOUNTID, PRODUCTID, 
+      PRODUCTBATCH, TRANAMT, YEARDAYAVG, 
+      STARTDATE, ENDDATE, CHANNEL, 
+      LASTMODIFYID, LASTMODIFYDATE, ISZY
+      )
+    values (#{saleid,jdbcType=VARCHAR}, #{accountid,jdbcType=VARCHAR}, #{productid,jdbcType=VARCHAR}, 
+      #{productbatch,jdbcType=VARCHAR}, #{tranamt,jdbcType=DOUBLE}, #{yeardayavg,jdbcType=DOUBLE}, 
+      #{startdate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, #{channel,jdbcType=VARCHAR}, 
+      #{lastmodifyid,jdbcType=VARCHAR}, #{lastmodifydate,jdbcType=DATE}, #{iszy,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.FinanceDetail">
+    insert into t_finance_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="saleid != null">
+        SALEID,
+      </if>
+      <if test="accountid != null">
+        ACCOUNTID,
+      </if>
+      <if test="productid != null">
+        PRODUCTID,
+      </if>
+      <if test="productbatch != null">
+        PRODUCTBATCH,
+      </if>
+      <if test="tranamt != null">
+        TRANAMT,
+      </if>
+      <if test="yeardayavg != null">
+        YEARDAYAVG,
+      </if>
+      <if test="startdate != null">
+        STARTDATE,
+      </if>
+      <if test="enddate != null">
+        ENDDATE,
+      </if>
+      <if test="channel != null">
+        CHANNEL,
+      </if>
+      <if test="lastmodifyid != null">
+        LASTMODIFYID,
+      </if>
+      <if test="lastmodifydate != null">
+        LASTMODIFYDATE,
+      </if>
+      <if test="iszy != null">
+        ISZY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="saleid != null">
+        #{saleid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountid != null">
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="productid != null">
+        #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="productbatch != null">
+        #{productbatch,jdbcType=VARCHAR},
+      </if>
+      <if test="tranamt != null">
+        #{tranamt,jdbcType=DOUBLE},
+      </if>
+      <if test="yeardayavg != null">
+        #{yeardayavg,jdbcType=DOUBLE},
+      </if>
+      <if test="startdate != null">
+        #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null">
+        #{enddate,jdbcType=DATE},
+      </if>
+      <if test="channel != null">
+        #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyid != null">
+        #{lastmodifyid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifydate != null">
+        #{lastmodifydate,jdbcType=DATE},
+      </if>
+      <if test="iszy != null">
+        #{iszy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.FinanceDetail">
+    update t_finance_detail
+    <set>
+      <if test="accountid != null">
+        ACCOUNTID = #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="productid != null">
+        PRODUCTID = #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="productbatch != null">
+        PRODUCTBATCH = #{productbatch,jdbcType=VARCHAR},
+      </if>
+      <if test="tranamt != null">
+        TRANAMT = #{tranamt,jdbcType=DOUBLE},
+      </if>
+      <if test="yeardayavg != null">
+        YEARDAYAVG = #{yeardayavg,jdbcType=DOUBLE},
+      </if>
+      <if test="startdate != null">
+        STARTDATE = #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null">
+        ENDDATE = #{enddate,jdbcType=DATE},
+      </if>
+      <if test="channel != null">
+        CHANNEL = #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifyid != null">
+        LASTMODIFYID = #{lastmodifyid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmodifydate != null">
+        LASTMODIFYDATE = #{lastmodifydate,jdbcType=DATE},
+      </if>
+      <if test="iszy != null">
+        ISZY = #{iszy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SALEID = #{saleid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.FinanceDetail">
+    update t_finance_detail
+    set ACCOUNTID = #{accountid,jdbcType=VARCHAR},
+      PRODUCTID = #{productid,jdbcType=VARCHAR},
+      PRODUCTBATCH = #{productbatch,jdbcType=VARCHAR},
+      TRANAMT = #{tranamt,jdbcType=DOUBLE},
+      YEARDAYAVG = #{yeardayavg,jdbcType=DOUBLE},
+      STARTDATE = #{startdate,jdbcType=DATE},
+      ENDDATE = #{enddate,jdbcType=DATE},
+      CHANNEL = #{channel,jdbcType=VARCHAR},
+      LASTMODIFYID = #{lastmodifyid,jdbcType=VARCHAR},
+      LASTMODIFYDATE = #{lastmodifydate,jdbcType=DATE},
+      ISZY = #{iszy,jdbcType=VARCHAR}
+    where SALEID = #{saleid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.ElectricJournalMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.ElectricJournal" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CHANNELID" property="channelid" jdbcType="VARCHAR" />
+    <result column="CLINICDATE" property="clinicdate" jdbcType="VARCHAR" />
+    <result column="CLINICFEE" property="clinicfee" jdbcType="VARCHAR" />
+    <result column="CLINICLABEL" property="cliniclabel" jdbcType="VARCHAR" />
+    <result column="DEVBALANDATE" property="devbalandate" jdbcType="VARCHAR" />
+    <result column="DEVDATE" property="devdate" jdbcType="VARCHAR" />
+    <result column="DEVNO" property="devno" jdbcType="VARCHAR" />
+    <result column="DEVTIME" property="devtime" jdbcType="VARCHAR" />
+    <result column="DISTRICTNO" property="districtno" jdbcType="VARCHAR" />
+    <result column="FEEEXPLAIN" property="feeexplain" jdbcType="VARCHAR" />
+    <result column="HOSPCODE" property="hospcode" jdbcType="VARCHAR" />
+    <result column="HOSPCODEEXPLAIN" property="hospcodeexplain" jdbcType="VARCHAR" />
+    <result column="HOSPITALNO" property="hospitalno" jdbcType="VARCHAR" />
+    <result column="INDEXNO" property="indexno" jdbcType="VARCHAR" />
+    <result column="JOURNALNO" property="journalno" jdbcType="DECIMAL" />
+    <result column="OTHERDATA1" property="otherdata1" jdbcType="VARCHAR" />
+    <result column="OTHERDATA2" property="otherdata2" jdbcType="VARCHAR" />
+    <result column="PATIENTID" property="patientid" jdbcType="VARCHAR" />
+    <result column="POSPCODE" property="pospcode" jdbcType="VARCHAR" />
+    <result column="POSPCODEEXPLAIN" property="pospcodeexplain" jdbcType="VARCHAR" />
+    <result column="RCPTNO" property="rcptno" jdbcType="VARCHAR" />
+    <result column="TRANACCT" property="tranacct" jdbcType="VARCHAR" />
+    <result column="TRANCODE" property="trancode" jdbcType="VARCHAR" />
+    <result column="TRANDATE" property="trandate" jdbcType="VARCHAR" />
+    <result column="TRANSTAT" property="transtat" jdbcType="VARCHAR" />
+    <result column="VISITNO" property="visitno" jdbcType="VARCHAR" />
+    <result column="POSPCODECOMMENT" property="pospcodecomment" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CHANNELID, CLINICDATE, CLINICFEE, CLINICLABEL, DEVBALANDATE, DEVDATE, DEVNO, 
+    DEVTIME, DISTRICTNO, FEEEXPLAIN, HOSPCODE, HOSPCODEEXPLAIN, HOSPITALNO, INDEXNO, 
+    JOURNALNO, OTHERDATA1, OTHERDATA2, PATIENTID, POSPCODE, POSPCODEEXPLAIN, RCPTNO, 
+    TRANACCT, TRANCODE, TRANDATE, TRANSTAT, VISITNO
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ELECTRICJOURNAL
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <select id="selectElectricJournalList" parameterType="com.nantian.domain.ElectricJournal" resultMap="BaseResultMap">
+  	select journal.*,(select ERRMSG from T_ERRCODE where ERRNO=journal.pospcode) as POSPCODECOMMENT from ELECTRICJOURNAL journal where 1=1 
+  	<if test="channelid != null" >
+       and  CHANNELID = #{channelid,jdbcType=VARCHAR}
+      </if>
+      <if test="clinicdate != null and clinicdate!=''"  >
+       and   CLINICDATE = #{clinicdate,jdbcType=VARCHAR}
+      </if>
+      <if test="clinicfee != null and clinicfee!=''" >
+       and   CLINICFEE = #{clinicfee,jdbcType=VARCHAR}
+      </if>
+      <if test="cliniclabel != null" >
+       and   CLINICLABEL = #{cliniclabel,jdbcType=VARCHAR}
+      </if>
+      <if test="devbalandate != null" >
+       and   DEVBALANDATE = #{devbalandate,jdbcType=VARCHAR}
+      </if>
+      <if test="devdate != null and devdate!=''" >
+       and   DEVDATE = #{devdate,jdbcType=VARCHAR}
+      </if>
+      <if test="devno != null" >
+       and   DEVNO = #{devno,jdbcType=VARCHAR}
+      </if>
+      <if test="devtime != null" >
+       and   DEVTIME = #{devtime,jdbcType=VARCHAR}
+      </if>
+      <if test="districtno != null" >
+       and   DISTRICTNO = #{districtno,jdbcType=VARCHAR}
+      </if>
+      <if test="feeexplain != null" >
+       and   FEEEXPLAIN = #{feeexplain,jdbcType=VARCHAR}
+      </if>
+      <if test="hospcode != null" >
+       and   HOSPCODE = #{hospcode,jdbcType=VARCHAR}
+      </if>
+      <if test="hospcodeexplain != null" >
+       and   HOSPCODEEXPLAIN = #{hospcodeexplain,jdbcType=VARCHAR}
+      </if>
+      <if test="hospitalno != null" >
+       and   HOSPITALNO = #{hospitalno,jdbcType=VARCHAR}
+      </if>
+      <if test="indexno != null" >
+       and   INDEXNO = #{indexno,jdbcType=VARCHAR}
+      </if>
+      <if test="journalno != null" >
+       and   JOURNALNO = #{journalno,jdbcType=DECIMAL}
+      </if>
+      <if test="otherdata1 != null" >
+       and   OTHERDATA1 = #{otherdata1,jdbcType=VARCHAR}
+      </if>
+      <if test="otherdata2 != null" >
+       and   OTHERDATA2 = #{otherdata2,jdbcType=VARCHAR}
+      </if>
+      <if test="patientid != null" >
+       and   PATIENTID = #{patientid,jdbcType=VARCHAR}
+      </if>
+      <if test="pospcode != null" >
+       and   POSPCODE = #{pospcode,jdbcType=VARCHAR}
+      </if>
+      <if test="pospcodeexplain != null" >
+       and   POSPCODEEXPLAIN = #{pospcodeexplain,jdbcType=VARCHAR}
+      </if>
+      <if test="rcptno != null" >
+       and   RCPTNO = #{rcptno,jdbcType=VARCHAR}
+      </if>
+      <if test="tranacct != null and tranacct!=''" >
+       and   TRANACCT like CONCAT(CONCAT('%',#{tranacct,jdbcType=VARCHAR}),'%') 
+      </if>
+      <if test="trancode != null and trancode!=''" >
+        and  TRANCODE = #{trancode,jdbcType=VARCHAR}
+      </if>
+      <if test="trandate != null" >
+       and   TRANDATE = #{trandate,jdbcType=VARCHAR}
+      </if>
+      <if test="transtat != null" >
+       and   TRANSTAT = #{transtat,jdbcType=VARCHAR}
+      </if>
+      <if test="visitno != null" >
+       and   VISITNO = #{visitno,jdbcType=VARCHAR}
+      </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ELECTRICJOURNAL
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.ElectricJournal" >
+    insert into ELECTRICJOURNAL (ID, CHANNELID, CLINICDATE, 
+      CLINICFEE, CLINICLABEL, DEVBALANDATE, 
+      DEVDATE, DEVNO, DEVTIME, 
+      DISTRICTNO, FEEEXPLAIN, HOSPCODE, 
+      HOSPCODEEXPLAIN, HOSPITALNO, INDEXNO, 
+      JOURNALNO, OTHERDATA1, OTHERDATA2, 
+      PATIENTID, POSPCODE, POSPCODEEXPLAIN, 
+      RCPTNO, TRANACCT, TRANCODE, 
+      TRANDATE, TRANSTAT, VISITNO
+      )
+    values (#{id,jdbcType=DECIMAL}, #{channelid,jdbcType=VARCHAR}, #{clinicdate,jdbcType=VARCHAR}, 
+      #{clinicfee,jdbcType=VARCHAR}, #{cliniclabel,jdbcType=VARCHAR}, #{devbalandate,jdbcType=VARCHAR}, 
+      #{devdate,jdbcType=VARCHAR}, #{devno,jdbcType=VARCHAR}, #{devtime,jdbcType=VARCHAR}, 
+      #{districtno,jdbcType=VARCHAR}, #{feeexplain,jdbcType=VARCHAR}, #{hospcode,jdbcType=VARCHAR}, 
+      #{hospcodeexplain,jdbcType=VARCHAR}, #{hospitalno,jdbcType=VARCHAR}, #{indexno,jdbcType=VARCHAR}, 
+      #{journalno,jdbcType=DECIMAL}, #{otherdata1,jdbcType=VARCHAR}, #{otherdata2,jdbcType=VARCHAR}, 
+      #{patientid,jdbcType=VARCHAR}, #{pospcode,jdbcType=VARCHAR}, #{pospcodeexplain,jdbcType=VARCHAR}, 
+      #{rcptno,jdbcType=VARCHAR}, #{tranacct,jdbcType=VARCHAR}, #{trancode,jdbcType=VARCHAR}, 
+      #{trandate,jdbcType=VARCHAR}, #{transtat,jdbcType=VARCHAR}, #{visitno,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.ElectricJournal" >
+    insert into ELECTRICJOURNAL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="channelid != null" >
+        CHANNELID,
+      </if>
+      <if test="clinicdate != null" >
+        CLINICDATE,
+      </if>
+      <if test="clinicfee != null" >
+        CLINICFEE,
+      </if>
+      <if test="cliniclabel != null" >
+        CLINICLABEL,
+      </if>
+      <if test="devbalandate != null" >
+        DEVBALANDATE,
+      </if>
+      <if test="devdate != null" >
+        DEVDATE,
+      </if>
+      <if test="devno != null" >
+        DEVNO,
+      </if>
+      <if test="devtime != null" >
+        DEVTIME,
+      </if>
+      <if test="districtno != null" >
+        DISTRICTNO,
+      </if>
+      <if test="feeexplain != null" >
+        FEEEXPLAIN,
+      </if>
+      <if test="hospcode != null" >
+        HOSPCODE,
+      </if>
+      <if test="hospcodeexplain != null" >
+        HOSPCODEEXPLAIN,
+      </if>
+      <if test="hospitalno != null" >
+        HOSPITALNO,
+      </if>
+      <if test="indexno != null" >
+        INDEXNO,
+      </if>
+      <if test="journalno != null" >
+        JOURNALNO,
+      </if>
+      <if test="otherdata1 != null" >
+        OTHERDATA1,
+      </if>
+      <if test="otherdata2 != null" >
+        OTHERDATA2,
+      </if>
+      <if test="patientid != null" >
+        PATIENTID,
+      </if>
+      <if test="pospcode != null" >
+        POSPCODE,
+      </if>
+      <if test="pospcodeexplain != null" >
+        POSPCODEEXPLAIN,
+      </if>
+      <if test="rcptno != null" >
+        RCPTNO,
+      </if>
+      <if test="tranacct != null" >
+        TRANACCT,
+      </if>
+      <if test="trancode != null" >
+        TRANCODE,
+      </if>
+      <if test="trandate != null" >
+        TRANDATE,
+      </if>
+      <if test="transtat != null" >
+        TRANSTAT,
+      </if>
+      <if test="visitno != null" >
+        VISITNO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="channelid != null" >
+        #{channelid,jdbcType=VARCHAR},
+      </if>
+      <if test="clinicdate != null" >
+        #{clinicdate,jdbcType=VARCHAR},
+      </if>
+      <if test="clinicfee != null" >
+        #{clinicfee,jdbcType=VARCHAR},
+      </if>
+      <if test="cliniclabel != null" >
+        #{cliniclabel,jdbcType=VARCHAR},
+      </if>
+      <if test="devbalandate != null" >
+        #{devbalandate,jdbcType=VARCHAR},
+      </if>
+      <if test="devdate != null" >
+        #{devdate,jdbcType=VARCHAR},
+      </if>
+      <if test="devno != null" >
+        #{devno,jdbcType=VARCHAR},
+      </if>
+      <if test="devtime != null" >
+        #{devtime,jdbcType=VARCHAR},
+      </if>
+      <if test="districtno != null" >
+        #{districtno,jdbcType=VARCHAR},
+      </if>
+      <if test="feeexplain != null" >
+        #{feeexplain,jdbcType=VARCHAR},
+      </if>
+      <if test="hospcode != null" >
+        #{hospcode,jdbcType=VARCHAR},
+      </if>
+      <if test="hospcodeexplain != null" >
+        #{hospcodeexplain,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalno != null" >
+        #{hospitalno,jdbcType=VARCHAR},
+      </if>
+      <if test="indexno != null" >
+        #{indexno,jdbcType=VARCHAR},
+      </if>
+      <if test="journalno != null" >
+        #{journalno,jdbcType=DECIMAL},
+      </if>
+      <if test="otherdata1 != null" >
+        #{otherdata1,jdbcType=VARCHAR},
+      </if>
+      <if test="otherdata2 != null" >
+        #{otherdata2,jdbcType=VARCHAR},
+      </if>
+      <if test="patientid != null" >
+        #{patientid,jdbcType=VARCHAR},
+      </if>
+      <if test="pospcode != null" >
+        #{pospcode,jdbcType=VARCHAR},
+      </if>
+      <if test="pospcodeexplain != null" >
+        #{pospcodeexplain,jdbcType=VARCHAR},
+      </if>
+      <if test="rcptno != null" >
+        #{rcptno,jdbcType=VARCHAR},
+      </if>
+      <if test="tranacct != null" >
+        #{tranacct,jdbcType=VARCHAR},
+      </if>
+      <if test="trancode != null" >
+        #{trancode,jdbcType=VARCHAR},
+      </if>
+      <if test="trandate != null" >
+        #{trandate,jdbcType=VARCHAR},
+      </if>
+      <if test="transtat != null" >
+        #{transtat,jdbcType=VARCHAR},
+      </if>
+      <if test="visitno != null" >
+        #{visitno,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.ElectricJournal" >
+    update ELECTRICJOURNAL
+    <set >
+      <if test="channelid != null" >
+        CHANNELID = #{channelid,jdbcType=VARCHAR},
+      </if>
+      <if test="clinicdate != null" >
+        CLINICDATE = #{clinicdate,jdbcType=VARCHAR},
+      </if>
+      <if test="clinicfee != null" >
+        CLINICFEE = #{clinicfee,jdbcType=VARCHAR},
+      </if>
+      <if test="cliniclabel != null" >
+        CLINICLABEL = #{cliniclabel,jdbcType=VARCHAR},
+      </if>
+      <if test="devbalandate != null" >
+        DEVBALANDATE = #{devbalandate,jdbcType=VARCHAR},
+      </if>
+      <if test="devdate != null" >
+        DEVDATE = #{devdate,jdbcType=VARCHAR},
+      </if>
+      <if test="devno != null" >
+        DEVNO = #{devno,jdbcType=VARCHAR},
+      </if>
+      <if test="devtime != null" >
+        DEVTIME = #{devtime,jdbcType=VARCHAR},
+      </if>
+      <if test="districtno != null" >
+        DISTRICTNO = #{districtno,jdbcType=VARCHAR},
+      </if>
+      <if test="feeexplain != null" >
+        FEEEXPLAIN = #{feeexplain,jdbcType=VARCHAR},
+      </if>
+      <if test="hospcode != null" >
+        HOSPCODE = #{hospcode,jdbcType=VARCHAR},
+      </if>
+      <if test="hospcodeexplain != null" >
+        HOSPCODEEXPLAIN = #{hospcodeexplain,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalno != null" >
+        HOSPITALNO = #{hospitalno,jdbcType=VARCHAR},
+      </if>
+      <if test="indexno != null" >
+        INDEXNO = #{indexno,jdbcType=VARCHAR},
+      </if>
+      <if test="journalno != null" >
+        JOURNALNO = #{journalno,jdbcType=DECIMAL},
+      </if>
+      <if test="otherdata1 != null" >
+        OTHERDATA1 = #{otherdata1,jdbcType=VARCHAR},
+      </if>
+      <if test="otherdata2 != null" >
+        OTHERDATA2 = #{otherdata2,jdbcType=VARCHAR},
+      </if>
+      <if test="patientid != null" >
+        PATIENTID = #{patientid,jdbcType=VARCHAR},
+      </if>
+      <if test="pospcode != null" >
+        POSPCODE = #{pospcode,jdbcType=VARCHAR},
+      </if>
+      <if test="pospcodeexplain != null" >
+        POSPCODEEXPLAIN = #{pospcodeexplain,jdbcType=VARCHAR},
+      </if>
+      <if test="rcptno != null" >
+        RCPTNO = #{rcptno,jdbcType=VARCHAR},
+      </if>
+      <if test="tranacct != null" >
+        TRANACCT = #{tranacct,jdbcType=VARCHAR},
+      </if>
+      <if test="trancode != null" >
+        TRANCODE = #{trancode,jdbcType=VARCHAR},
+      </if>
+      <if test="trandate != null" >
+        TRANDATE = #{trandate,jdbcType=VARCHAR},
+      </if>
+      <if test="transtat != null" >
+        TRANSTAT = #{transtat,jdbcType=VARCHAR},
+      </if>
+      <if test="visitno != null" >
+        VISITNO = #{visitno,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.ElectricJournal" >
+    update ELECTRICJOURNAL
+    set CHANNELID = #{channelid,jdbcType=VARCHAR},
+      CLINICDATE = #{clinicdate,jdbcType=VARCHAR},
+      CLINICFEE = #{clinicfee,jdbcType=VARCHAR},
+      CLINICLABEL = #{cliniclabel,jdbcType=VARCHAR},
+      DEVBALANDATE = #{devbalandate,jdbcType=VARCHAR},
+      DEVDATE = #{devdate,jdbcType=VARCHAR},
+      DEVNO = #{devno,jdbcType=VARCHAR},
+      DEVTIME = #{devtime,jdbcType=VARCHAR},
+      DISTRICTNO = #{districtno,jdbcType=VARCHAR},
+      FEEEXPLAIN = #{feeexplain,jdbcType=VARCHAR},
+      HOSPCODE = #{hospcode,jdbcType=VARCHAR},
+      HOSPCODEEXPLAIN = #{hospcodeexplain,jdbcType=VARCHAR},
+      HOSPITALNO = #{hospitalno,jdbcType=VARCHAR},
+      INDEXNO = #{indexno,jdbcType=VARCHAR},
+      JOURNALNO = #{journalno,jdbcType=DECIMAL},
+      OTHERDATA1 = #{otherdata1,jdbcType=VARCHAR},
+      OTHERDATA2 = #{otherdata2,jdbcType=VARCHAR},
+      PATIENTID = #{patientid,jdbcType=VARCHAR},
+      POSPCODE = #{pospcode,jdbcType=VARCHAR},
+      POSPCODEEXPLAIN = #{pospcodeexplain,jdbcType=VARCHAR},
+      RCPTNO = #{rcptno,jdbcType=VARCHAR},
+      TRANACCT = #{tranacct,jdbcType=VARCHAR},
+      TRANCODE = #{trancode,jdbcType=VARCHAR},
+      TRANDATE = #{trandate,jdbcType=VARCHAR},
+      TRANSTAT = #{transtat,jdbcType=VARCHAR},
+      VISITNO = #{visitno,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.OwnerAreaMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.OwnerAreaKey" >
+    <id column="AREAID" property="areaid" jdbcType="VARCHAR" />
+     <id column="AREANAME" property="areaname" jdbcType="VARCHAR" />
+    <id column="ENTRYID" property="entryid" jdbcType="VARCHAR" />
+    <id column="ENTRYNAME" property="entryname" jdbcType="VARCHAR" />
+    <id column="FLOORNUM" property="floornum" jdbcType="VARCHAR" />
+    <id column="FLOORROOMNUM" property="floorroomnum" jdbcType="VARCHAR" />
+    <id column="OWNERID" property="ownerid" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.nantian.domain.OwnerAreaKey" >
+    select *
+    from T_OWNER_AREA
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+      and ENTRYID = #{entryid,jdbcType=VARCHAR}
+      and OWNERID = #{ownerid,jdbcType=VARCHAR}
+       and FLOORNUM = #{floornum,jdbcType=VARCHAR}
+       and FLOORROOMNUM = #{floorroomnum,jdbcType=VARCHAR} 
+  </select>
+  <select id="selectOwnerAreaList" parameterType="com.nantian.domain.OwnerAreaKey"  resultMap="BaseResultMap">
+    select a.*,b.areaname,c.entryname from T_OWNER_AREA a left join t_area b  on a.areaid=b.areaid left join t_entry c on a.entryid=c.entryid where 1=1
+      <if test="areaid != null and areaid!=''" >
+        AND a.AREAID=#{areaid}
+      </if>
+      <if test="entryid != null and entryid!=''" >
+        AND a.ENTRYID=#{entryid}
+      </if>
+      <if test="ownerid != null and ownerid!=''" >
+        AND a.OWNERID=#{ownerid}
+      </if>
+  </select>
+  
+   <select id="selectOwnerBindEntryList" parameterType="String"  resultType="String">
+    select entryid from t_owner_area where 1=1 and OWNERID=#{ownerid}
+      group by  entryid
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.OwnerAreaKey" >
+    delete from T_OWNER_AREA
+    where AREAID = #{areaid,jdbcType=VARCHAR}
+      and ENTRYID = #{entryid,jdbcType=VARCHAR}
+      and FLOORNUM = #{floornum,jdbcType=VARCHAR}
+      and FLOORROOMNUM = #{floorroomnum,jdbcType=VARCHAR}
+      and OWNERID = #{ownerid,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteByOwnerId" parameterType="String" >
+    delete from T_OWNER_AREA
+    where OWNERID = #{ownerid,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.nantian.domain.OwnerAreaKey" >
+    insert into T_OWNER_AREA (AREAID, ENTRYID, FLOORNUM, 
+      FLOORROOMNUM, OWNERID)
+    values (#{areaid,jdbcType=VARCHAR}, #{entryid,jdbcType=VARCHAR}, #{floornum,jdbcType=VARCHAR}, 
+      #{floorroomnum,jdbcType=VARCHAR}, #{ownerid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.OwnerAreaKey" >
+    insert into T_OWNER_AREA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="areaid != null" >
+        AREAID,
+      </if>
+      <if test="entryid != null" >
+        ENTRYID,
+      </if>
+      <if test="floornum != null" >
+        FLOORNUM,
+      </if>
+      <if test="floorroomnum != null" >
+        FLOORROOMNUM,
+      </if>
+      <if test="ownerid != null" >
+        OWNERID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="areaid != null" >
+        #{areaid,jdbcType=VARCHAR},
+      </if>
+      <if test="entryid != null" >
+        #{entryid,jdbcType=VARCHAR},
+      </if>
+      <if test="floornum != null" >
+        #{floornum,jdbcType=VARCHAR},
+      </if>
+      <if test="floorroomnum != null" >
+        #{floorroomnum,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerid != null" >
+        #{ownerid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

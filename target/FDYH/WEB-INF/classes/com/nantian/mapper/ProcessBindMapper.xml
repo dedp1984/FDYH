@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.ProcessBindMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.ProcessBind" >
+    <id column="ACCOUNTID" property="accountid" jdbcType="VARCHAR" />
+    <id column="MANAGERID" property="managerid" jdbcType="VARCHAR" />
+    <result column="PERCENT" property="percent" jdbcType="DOUBLE" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ACCOUNTID, MANAGERID, PERCENT, TYPE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.nantian.domain.ProcessBindKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_process_bind
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and MANAGERID = #{managerid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.ProcessBindKey" >
+    delete from t_process_bind
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and MANAGERID = #{managerid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.ProcessBind" >
+    insert into t_process_bind (ACCOUNTID, MANAGERID, PERCENT, 
+      TYPE)
+    values (#{accountid,jdbcType=VARCHAR}, #{managerid,jdbcType=VARCHAR}, #{percent,jdbcType=DOUBLE}, 
+      #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.ProcessBind" >
+    insert into t_process_bind
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        ACCOUNTID,
+      </if>
+      <if test="managerid != null" >
+        MANAGERID,
+      </if>
+      <if test="percent != null" >
+        PERCENT,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="managerid != null" >
+        #{managerid,jdbcType=VARCHAR},
+      </if>
+      <if test="percent != null" >
+        #{percent,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.ProcessBind" >
+    update t_process_bind
+    <set >
+      <if test="percent != null" >
+        PERCENT = #{percent,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and MANAGERID = #{managerid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.ProcessBind" >
+    update t_process_bind
+    set PERCENT = #{percent,jdbcType=DOUBLE},
+      TYPE = #{type,jdbcType=VARCHAR}
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and MANAGERID = #{managerid,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteByAccountId" parameterType="String" >
+    delete from T_PROCESS_BIND
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </delete>
+</mapper>

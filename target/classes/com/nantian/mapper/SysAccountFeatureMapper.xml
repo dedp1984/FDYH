@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.SysAccountFeatureMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.SysAccountFeatureKey" >
+    <id column="ACCOUNTID" property="accountid" jdbcType="VARCHAR" />
+    <id column="TYPE" property="type" jdbcType="VARCHAR" />
+    <id column="VALUE" property="value" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.nantian.domain.SysAccountFeatureKey" >
+    delete from sys_account_feature
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+      and TYPE = #{type,jdbcType=VARCHAR}
+      and VALUE = #{value,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteBySelective" parameterType="com.nantian.domain.SysAccountFeatureKey" >
+    delete from sys_account_feature
+    where 1=1 
+    <if test="accountid!=null and accountid!=''">
+      and  ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+    </if>
+    <if test="type!=null and type!=''">
+        and TYPE = #{type,jdbcType=VARCHAR}
+    </if>
+     <if test="value!=null and value!=''">
+         and VALUE = #{value,jdbcType=VARCHAR}
+     </if> 
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.SysAccountFeatureKey" >
+    insert into sys_account_feature (ACCOUNTID, TYPE, VALUE
+      )
+    values (#{accountid,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.SysAccountFeatureKey" >
+    insert into sys_account_feature
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        ACCOUNTID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="value != null" >
+        VALUE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        #{value,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectBySelective" parameterType="com.nantian.domain.SysAccountFeatureKey" resultMap="BaseResultMap">
+      select * from sys_account_feature where 1=1
+      <if test="accountid!=null and accountid!=''">
+          and accountid=#{accountid}
+      </if>
+      <if test="type!=null and type!=''">
+          and type=#{type}
+      </if>
+      <if test="value!=null and value!=''">
+          and value=#{value}
+      </if>
+  </select>
+</mapper>

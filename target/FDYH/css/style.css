@@ -1,0 +1,8 @@
+.enableVersion
+{
+	background-image: url('../images/release.gif');
+}
+.disableVersion
+{
+	background-image: url('../images/released.gif');
+}

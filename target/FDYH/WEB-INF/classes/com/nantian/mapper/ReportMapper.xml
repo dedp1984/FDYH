@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.ReportMapper" >
+  <select id="selectCloseDate" resultType="Date">
+    <![CDATA[
+    select IMPORTDATE from t_import_record 
+    where filetype=#{type} and importdate<=#{date}
+    group by importdate order by importdate desc limit 1
+    ]]>
+  </select>
+  
+  <select id="selectAccountBalAndYearAvgByManagerid" resultType="hashMap">
+      select  
+ 		a.managerid as managerid,
+		a.percent as  percent  ,
+        b.accountid as accountid,
+        b.accountname as accountname,
+        b.branchid  as branchid,
+        c.gendate,
+        c.bal as bal,
+        c.yearavg as yeardayavg,
+        c.m1,
+        c.m2,
+        c.m3,
+        c.m4,
+        c.m5,
+        c.m6,
+        c.m7,
+        c.m8,
+        c.m9,
+        c.m10,
+        c.m11,
+        c.m12
+      from 
+			t_account_base  b
+			left join t_accountbal_record c  on b.accountid=c.accountid
+			left join t_manager_account  a  on b.accountid=a.accountid
+	  where  1=1
+	  	   <if test="managerid!=null and managerid!=''">
+	  	       and a.managerid=#{managerid}
+	  	   </if>
+	  	   <if test="accounttype!=null and accounttype!=''">
+	  	       and b.accounttype=#{accounttype} 
+	  	   </if>
+	  	   <if test="branchid!=null and branchid!=''">
+	  	       and b.branchid=#{branchid}
+	  	   </if>
+	  	   <if test="accountid !=null and accountid!=''">
+	  	       and b.accountid like CONCAT(CONCAT('%',#{accountid}),'%')
+	  	   </if>
+		 	<if test="date!=null">
+		 	   and c.gendate=#{date} 
+		 	</if>
+	   group by b.accountid
+  </select>
+  
+  <select id="selectFinanceAccountBal" resultType="hashMap">
+       select  
+ 		a.managerid as managerid,
+		a.percent as  percent  ,
+        b.accountid as accountid,
+        b.accountname as accountname,
+        b.branchid  as branchid,
+        c.tranamt as bal,
+        c.startdate as startdate,
+        c.enddate as enddate
+        from 
+        	t_account_base  b
+        	inner join t_finance_detail c on b.accountid=c.accountid
+			left join t_manager_account a on b.accountid=a.accountid
+			left join T_FINANCE_PRODUCT_TYPE d on c.productid=d.id
+		where 1=1 and d.isjsckye=1
+			<![CDATA[
+				and (not (c.enddate<#{startdate} or c.startdate>#{enddate}))
+			]]>
+			<if test="managerid!=null and managerid!=''">
+			    and a.managerid=#{managerid}
+			</if>
+			<if test="accounttype!=null and accounttype!=''">
+			    and b.accounttype=#{accounttype}
+			</if>
+  </select>
+ 
+  <select id="selectFinanceAcountYearDayAvg" resultType="hashMap">
+      select  
+ 		a.managerid as managerid,
+		a.percent as  percent  ,
+        b.accountid as accountid,
+        b.accountname as accountname,
+        b.branchid  as branchid,
+        c.tranamt as bal,
+        c.startdate as startdate,
+        c.enddate as enddate
+      from 
+        	t_account_base  b
+        	inner join t_finance_detail c on b.accountid=c.accountid
+			left join t_manager_account a on b.accountid=a.accountid
+			left join T_FINANCE_PRODUCT_TYPE d on c.productid=d.id
+	  where 1=1 and d.isjsrj=1
+			<![CDATA[
+				and (not (c.enddate<#{startdate} or c.startdate>#{enddate}))
+			]]>
+			<if test="managerid!=null and managerid!=''">
+			    and a.managerid=#{managerid}
+			</if>
+			<if test="accounttype!=null and accounttype!=''">
+			    and b.accounttype=#{accounttype}
+			</if>
+  </select>
+
+  <select id="selectPersonAccountPledge" resultType="hashMap">
+      select  
+ 		a.managerid as managerid,
+		a.percent as  percent  ,
+        b.accountid as accountid,
+        b.accountname as accountname,
+        b.branchid  as branchid,
+        c.tranamt as bal,
+        c.startdate as startdate,
+        c.enddate as enddate
+      from 
+      	t_account_base  b
+      	inner join T_ACCOUNT_PERSON_PLEDGE c on b.accountid=c.accountid
+		left join t_manager_account  a on b.accountid=a.accountid	
+		where 1=1 and b.accounttype=5 and b.subaccttype=1
+		 <if test="managerid!=null and managerid!=''" >
+		     and a.managerid=#{managerid}
+		 </if>
+		 <![CDATA[
+		 	 and not (c.enddate<#{startdate}  or c.startdate>#{enddate})
+		 ]]>
+  </select>
+  
+  
+    <select id="selectPersonPledgeYearDayAvgDetail" resultType="hashMap">
+      	select  
+      		a.accountid ,
+			a.accountname,
+			d.branchname,
+            b.tranamt,
+            b.startdate,
+            b.enddate
+      	from 
+      		t_account_base  a,
+      		T_ACCOUNT_PERSON_PLEDGE b ,
+      		<if test="managerid!=null and managerid!=''">
+      		    t_manager_account c  ,
+      		</if>
+			sys_branch d
+      		where a.accounttype='5' and a.subaccttype='1'  and a.accountid=b.accountid  and a.branchid=d.branchid
+      		<if test="managerid!=null and managerid!=''">
+      		    and c.accountid=a.accountid and c.managerid=#{managerid}
+      		</if>
+      		<if test="branchid!=null and branchid!=''">
+      		    and a.branchid=#{branchid}
+      		</if>
+      		<if test="accountid!=null and accountid!=''">
+      		    and a.accountid like CONCAT(CONCAT('%',#{accountid}),'%')
+      		</if>     		
+  </select>
+
+  <select id="selectFinanceCnt"  resultType="map">
+      	select 
+ 			count(*) as cntamt,
+ 			sum(b.tranamt*c.percent) as totalamt
+	 	from 
+			t_account_base a
+ 			inner join t_finance_detail b on a.accountid=b.accountid
+			left join t_manager_account c on a.accountid=c.accountid
+			left join  t_finance_product_type d  on b.productid=d.id
+		where 1=1
+		 	<if test="accttypelist !=null">
+         		and a.accounttype in 
+       		 	<foreach collection="accttypelist" index="index" item="item" open="(" separator="," close=")">
+            		#{item}
+        		</foreach>
+    		</if>
+    		<if test="managerid!=null and managerid!=''">
+    		    and   c.managerid=#{managerid} 
+    		</if>
+			<if test="productid!=null and productid!=''">
+			    and   b.productid=#{productid}
+			</if>
+			<if test="productbatch!=null and productbatch!=''">
+			    and   b.productbatch like CONCAT(CONCAT('%',#{productbatch}),'%')
+			</if>
+			<if test="startdate!=null">
+			    and   b.startdate>=#{startdate}
+			</if>
+			<if test="enddate!=null">
+			    <![CDATA[
+			    	 and   b.enddate <=#{enddate}
+			    ]]>
+			</if>
+			<if test="channel!=null and channel!=''">
+			    and b.channel=#{channel}
+			</if>
+			<if test="iszy!=null and iszy!=''">
+			    and b.iszy=#{iszy}
+			</if>
+			
+  </select>  
+  
+   <select id="selectPledgeCntByManagerId"  resultType="map">
+      	select 
+ 			count(*) as cntamt,
+ 			sum(b.tranamt*c.percent) as totalamt
+	 	from 
+			t_account_base a
+			inner join T_ACCOUNT_PERSON_PLEDGE b on a.accountid=b.accountid
+ 			left join t_manager_account c on a.accountid=c.accountid		
+		where 1=1  and   c.managerid=#{managerid} 
+			<if test="startdate!=null">
+			    and   b.startdate>=#{startdate}
+			</if>
+			<if test="enddate!=null">
+			    <![CDATA[
+			    	 and   b.enddate <=#{enddate}
+			    ]]>
+			</if>			
+  </select>  
+  
+  <select id="selectPublicDepositChangeList" resultType="hashMap">
+      select 
+      	a.branchid as branchid,
+      	a.branchname as branchname,
+      	a.accountname as accountname,
+      	a.dqye  as dqye,
+      	a.gendate as enddate,
+      	sum(a.inamt) as inamt,
+      	sum(a.outamt) as outamt,
+      	sum(a.netinout) as netinout
+      from 
+      	 	(select   * from t_public_deposit_change  where 1=1 
+      	 		<if test="startdate!=null">
+      	 		    <![CDATA[
+      	 		    and	gendate>=#{startdate}
+      	 		    ]]>
+				</if>
+				<if test="enddate!=null">
+				    <![CDATA[
+				    and	gendate<=#{enddate}
+				    ]]>
+				</if> 
+				<if test="branchid!=null and branchid!=''">
+      	    		and branchid=#{branchid}
+      			</if>
+      			<if test="accountname !=null and accountname!=''">
+      	    		and accountname like CONCAT(CONCAT('%',#{accountname}),'%') 
+      			</if>
+				<if test="minnetamt!=null and minnetamt!=''">
+		    		and NETINOUT>=#{minnetamt}
+				</if> 
+      	order by gendate desc) a
+		group by  a.accountname 
+		order by a.branchid,a.gendate desc
+  </select>
+  
+   <select id="selectPublicDepositChangeDetail" resultType="hashMap">
+      select 
+      	a.branchid as branchid,
+      	a.branchname as branchname,
+      	a.accountname as accountname,
+      	a.dqye  as dqye,
+      	a.ncye  as ncye,
+      	a.tolastday as tolastday,
+      	a.tolastyear as tolastyear,
+      	a.subcode as subcode,
+      	a.inamt as inamt,
+      	a.outamt as outamt,
+      	a.netinout as netinout,
+      	a.gendate as enddate
+      from 
+      	t_public_deposit_change a
+      where 1=1  
+      	<if test="branchid!=null and branchid!=''">
+      	    and a.branchid=#{branchid}
+      	</if>
+      	<if test="accountname !=null and accountname!=''">
+      	    and a.accountname=#{accountname} 
+      	</if>
+      	<if test="startdate!=null">
+      	 	<![CDATA[
+      	 	and	gendate>=#{startdate}
+      	 	]]>
+		</if>
+		<if test="enddate!=null">
+			<![CDATA[
+				and	gendate<=#{enddate}
+			]]>
+		</if> 
+		<if test="minnetamt!=null and minnetamt!=''">
+		    	and NETINOUT>=#{minnetamt}
+		</if> 
+		order by a.gendate desc
+  </select>
+
+    <select id="selectPledgeDetail" resultType="hashMap">
+      select  
+		a.accounttype,
+		f.branchname,
+		a.accountid,
+		a.accountname,
+		b.tranamt,
+		b.startdate,
+		b.enddate
+		<if test="managerid!=null and managerid!=''">
+		    ,c.percent as percent
+		</if>
+	from 
+
+		t_account_base a
+
+		inner join T_ACCOUNT_PERSON_PLEDGE  b  on a.accountid=b.accountid
+
+		left join t_manager_account c on a.accountid=c.accountid
+
+		left join  sys_account d on c.managerid=d.accountid
+
+		left join  sys_branch f  on d.branchid=f.branchid
+
+	where 1=1 
+		<if test="branchid!=null and branchid!=''">
+		    and f.branchid=#{branchid}
+		</if>
+		<if test="managerid!=null and managerid!=''">
+		    and c.managerid=#{managerid}
+		</if>
+		<if test="startdate!=null">
+		    <![CDATA[
+		    and b.startdate>=#{startdate}
+		    ]]>
+		</if>
+		<if test="enddate!=null">
+		    <![CDATA[
+		    and b.enddate<=#{enddate}
+		    ]]>
+		    
+		</if>
+		and a.accounttype='5' and a.subaccttype='1'
+	    group by b.saleid
+  </select>
+  
+  <select id="selectFinanceDetail" resultType="hashMap">
+      select  
+		a.accounttype,
+		f.branchname,
+		a.accountid,
+		a.accountname,
+		b.tranamt,
+		b.startdate,
+		b.enddate,
+		b.channel,
+		b.iszy,
+		b.productbatch as productbatch,
+		e.name as productname,
+		g.name as channelname
+		<if test="managerid!=null and managerid!=''">
+		    ,c.percent as percent
+		</if>
+	from 
+
+		t_account_base a
+
+		inner join t_finance_detail  b  on a.accountid=b.accountid
+
+		left join t_manager_account c on a.accountid=c.accountid
+
+		left join  sys_account d on c.managerid=d.accountid
+
+		left join t_finance_product_type e on b.productid=e.id
+
+		left join  sys_branch f  on d.branchid=f.branchid
+		
+		left join  t_enum g on g.type=1 and g.value=b.channel
+
+	where 1=1 
+		<if test="branchid!=null and branchid!=''">
+		    and f.branchid=#{branchid}
+		</if>
+		<if test="managerid!=null and managerid!=''">
+		    and c.managerid=#{managerid}
+		</if>
+		<if test="productid!=null and productid!=''">
+		    and b.productid=#{productid}
+		</if>
+		<if test="productbatch!=null and productbatch!=''">
+		    and b.productbatch like CONCAT(CONCAT('%',#{productbatch}),'%') 
+		</if>
+		<if test="channel!=null and channel!=''">
+		    and b.channel=#{channel}
+		</if>
+		<if test="startdate!=null">
+		    <![CDATA[
+		    and b.startdate>=#{startdate}
+		    ]]>
+		</if>
+		<if test="enddate!=null">
+		    <![CDATA[
+		    and b.enddate<=#{enddate}
+		    ]]>
+		    
+		</if>
+		<if test="accttypelist !=null">
+	         and a.accounttype in 
+	        <foreach collection="accttypelist" index="index" item="item" open="(" separator="," close=")">
+	            #{item}
+	        </foreach>
+    	</if>
+    	<if test="iszy!=null and iszy!=''">
+    	    b.iszy=#{iszy}
+    	</if>
+	group by b.saleid
+  </select>
+  
+   <select id="selectFinanceAvgDetail" resultType="hashMap">
+      select  
+		a.accounttype,
+		f.branchname,
+		a.accountid,
+		a.accountname,
+		b.tranamt,
+		b.startdate,
+		b.enddate,
+		b.channel,
+		b.productbatch as productbatch,
+		e.name as productname,
+		c.percent as percent
+	from 
+
+		t_account_base a
+
+		inner join t_finance_detail  b  on a.accountid=b.accountid
+
+		left join t_manager_account c on a.accountid=c.accountid
+
+		left join  sys_account d on c.managerid=d.accountid
+
+		left join t_finance_product_type e on b.productid=e.id
+
+		left join  sys_branch f  on a.branchid=f.branchid
+
+	where 1=1 
+		<if test="managerid!=null and managerid!=''">
+		    and c.managerid=#{managerid}
+		</if>
+		<![CDATA[
+		and   not (b.enddate<#{startdate}  or   b.startdate>#{enddate})
+		]]>
+		<if test="accttypelist !=null">
+	         and a.accounttype in 
+	        <foreach collection="accttypelist" index="index" item="item" open="(" separator="," close=")">
+	            #{item}
+	        </foreach>
+    	</if>
+	group by b.saleid
+  </select>
+  
+ 
+  <resultMap type="hashMap" id="BalAndYearDayAvgResultMap">
+      <id column="accountid" property="accountid" jdbcType="VARCHAR"/>
+      <result column="balgendate" property="balgendate" jdbcType="DATE"/>
+      <result column="branchid" property="branchid" jdbcType="VARCHAR"/>
+      <result column="accountname" property="accountname" jdbcType="VARCHAR"/>
+      <result column="customno" property="customno" jdbcType="VARCHAR"/>
+      <result column="subcode" property="subcode" jdbcType="VARCHAR"/>
+      <result column="bal" property="bal" jdbcType="DOUBLE"/>
+      <result column="avggendate" property="avggendate" jdbcType="DATE"/>
+      <result column="yearavg" property="yearavg" jdbcType="DOUBLE"/>
+      <result column="m1" property="m1" jdbcType="DOUBLE"/>
+      <result column="m2" property="m2" jdbcType="DOUBLE"/>
+      <result column="m3" property="m3" jdbcType="DOUBLE"/>
+      <result column="m4" property="m4" jdbcType="DOUBLE"/>
+      <result column="m5" property="m5" jdbcType="DOUBLE"/>
+      <result column="m6" property="m6" jdbcType="DOUBLE"/>
+      <result column="m7" property="m7" jdbcType="DOUBLE"/>
+      <result column="m8" property="m8" jdbcType="DOUBLE"/>
+      <result column="m9" property="m9" jdbcType="DOUBLE"/>
+      <result column="m10" property="m10" jdbcType="DOUBLE"/>
+      <result column="m11" property="m11" jdbcType="DOUBLE"/>
+      <result column="m12" property="m12" jdbcType="DOUBLE"/>
+      <result column="branchname" property="branchname" jdbcType="VARCHAR"/>
+      <collection property="binds" column="accountid" select="selectBinds" ofType="com.nantian.domain.BindAccountToManager"/>
+  </resultMap>
+  <resultMap type="hashMap" id="BindsResultMap">
+      <id column="accountid" property="accountid" jdbcType="VARCHAR"/>
+      <result column="branchname" property="branchname" jdbcType="VARCHAR"/>
+      <result column="managerid" property="managerid" jdbcType="VARCHAR"/>
+      <result column="percent" property="percent" jdbcType="VARCHAR"/>
+  </resultMap>
+  <select id="selectBinds" parameterType="String" resultMap="BindsResultMap">
+      select 
+      	b.accountname as managerid,
+      	a.percent,
+      	c.branchname
+      from 
+        t_manager_account a
+      left join
+        sys_account b on a.managerid=b.accountid
+      left join 
+        sys_branch c on b.branchid=c.branchid
+      where 
+        a.accountid=#{accountid}
+  </select>
+   <select id="selectAccountBalAndYearDayAvg" resultMap="BalAndYearDayAvgResultMap">
+      select 
+      	a.gendate as balgendate,
+      	a.accountid as accountid ,
+      	a.branchid,
+      	a.accountname,
+      	a.customno,
+      	a.subcode,
+      	a.bal as bal,
+      	a.yearavg ,
+      	a.m1,
+      	a.m2,
+      	a.m3,
+      	a.m4,
+      	a.m5,
+      	a.m6,
+      	a.m7,
+      	a.m8,
+      	a.m9,
+      	a.m10,
+      	a.m11,
+      	a.m12,
+      	a.mrate,
+      	a.fdfs,
+      	a.fdbl,
+      	a.wjfl,
+      	a.acctstatus,
+      	c.branchname 
+      from 
+      	<![CDATA[
+      	(select * from  (select distinct accountid,gendate from t_accountbal_record where gendate<=#{gendate} order by gendate desc) f  group by accountid order by gendate desc)  g  
+      	]]>     
+      left join  t_accountbal_record a on a.accountid=g.accountid and a.gendate=g.gendate
+      left join  t_account_base d on a.accountid=d.accountid
+      left join t_manager_account e on d.accountid=e.accountid
+      left join  sys_account f on e.managerid=f.accountid
+      left join  sys_branch c on d.branchid=c.branchid
+	  where 1=1	
+	  <if test="accountid!=null and accountid!=''">
+	     and  a.accountid like CONCAT(CONCAT('%',#{accountid}),'%')
+	  </if>
+	  <if test="accounttype!=null and accounttype!=''">
+	      and a.accounttype =#{accounttype}
+	  </if>
+	  <if test="branchid!=null and branchid!=''">
+	      and f.branchid=#{branchid}
+	  </if>
+	  <if test="managerid!=null and managerid!=''">
+	      and f.accountid=#{managerid}
+	  </if>
+	  <if test="accountname!=null and accountname!=''">
+	     and  a.accountname like CONCAT(CONCAT('%',#{accountname}),'%') 
+	  </if>
+	  <if test="customno!=null and customno!=''">
+	       and  a.customno like CONCAT(CONCAT('%',#{customno}),'%') 
+	  </if>
+	  <if test="property!=null and property!=''">
+	       and  a.property like CONCAT(CONCAT('%',#{property}),'%') 
+	  </if>
+	  <if test="subcode!=null and subcode!=''">
+	       and  a.subcode like CONCAT(CONCAT('%',#{subcode}),'%') 
+	  </if>
+	  <if test="status!=null and status!=''">
+	       and  a.acctstatus=#{status} 
+	  </if>
+	  group by a.accountid
+  </select>
+</mapper>

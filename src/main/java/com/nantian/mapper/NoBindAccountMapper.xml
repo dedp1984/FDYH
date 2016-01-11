@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nantian.dao.NoBindAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.nantian.domain.NoBindAccount" >
+    <id column="ACCOUNTID" property="accountid" jdbcType="VARCHAR" />
+    <result column="BRANCHID" property="branchid" jdbcType="VARCHAR" />
+    <result column="ACCOUNTNAME" property="accountname" jdbcType="VARCHAR" />
+    <result column="ACCOUNTTYPE" property="accounttype" jdbcType="VARCHAR" />
+    <result column="MACCOUNTID" property="maccountid" jdbcType="VARCHAR" />
+    <result column="CUSTOMNO" property="customno" jdbcType="VARCHAR" />
+    <result column="CURRENCY" property="currency" jdbcType="VARCHAR" />
+    <result column="OPENDATE" property="opendate" jdbcType="DATE" />
+    <result column="ENDDATE" property="enddate" jdbcType="DATE" />
+    <result column="SUBCODE" property="subcode" jdbcType="VARCHAR" />
+    <result column="PROPERTY" property="property" jdbcType="VARCHAR" />
+    <result column="ACCTSTATUS" property="acctstatus" jdbcType="VARCHAR" />
+    <association column="branchid" property="branch" select="selectBranch" />
+  </resultMap>
+  <resultMap id="SysBranchResult" type="com.nantian.domain.SysBranch">
+    <id column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
+    <result column="BRANCHNAME" jdbcType="VARCHAR" property="branchname" />
+    <result column="PARENTID" jdbcType="VARCHAR" property="parentid" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="ALIAS" jdbcType="VARCHAR" property="alias" />
+  </resultMap>
+  <select id="selectBranch" parameterType="String" resultMap="SysBranchResult">
+  	select * from SYS_BRANCH where 1=1 and  BRANCHID=#{branchid}
+  </select>
+  <sql id="Base_Column_List" >
+    ACCOUNTID, BRANCHID, ACCOUNTNAME, ACCOUNTTYPE, MACCOUNTID, CUSTOMNO, CURRENCY, OPENDATE, 
+    ENDDATE, SUBCODE, PROPERTY, ACCTSTATUS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_nobindaccount
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_nobindaccount
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nantian.domain.NoBindAccount" >
+    insert into t_nobindaccount (ACCOUNTID, BRANCHID, ACCOUNTNAME, 
+      ACCOUNTTYPE, MACCOUNTID, CUSTOMNO, 
+      CURRENCY, OPENDATE, ENDDATE, 
+      SUBCODE, PROPERTY, ACCTSTATUS
+      )
+    values (#{accountid,jdbcType=VARCHAR}, #{branchid,jdbcType=VARCHAR}, #{accountname,jdbcType=VARCHAR}, 
+      #{accounttype,jdbcType=VARCHAR}, #{maccountid,jdbcType=VARCHAR}, #{customno,jdbcType=VARCHAR}, 
+      #{currency,jdbcType=VARCHAR}, #{opendate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, 
+      #{subcode,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR}, #{acctstatus,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nantian.domain.NoBindAccount" >
+    insert into t_nobindaccount
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        ACCOUNTID,
+      </if>
+      <if test="branchid != null" >
+        BRANCHID,
+      </if>
+      <if test="accountname != null" >
+        ACCOUNTNAME,
+      </if>
+      <if test="accounttype != null" >
+        ACCOUNTTYPE,
+      </if>
+      <if test="maccountid != null" >
+        MACCOUNTID,
+      </if>
+      <if test="customno != null" >
+        CUSTOMNO,
+      </if>
+      <if test="currency != null" >
+        CURRENCY,
+      </if>
+      <if test="opendate != null" >
+        OPENDATE,
+      </if>
+      <if test="enddate != null" >
+        ENDDATE,
+      </if>
+      <if test="subcode != null" >
+        SUBCODE,
+      </if>
+      <if test="property != null" >
+        PROPERTY,
+      </if>
+      <if test="acctstatus != null" >
+        ACCTSTATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null" >
+        #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="maccountid != null" >
+        #{maccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="customno != null" >
+        #{customno,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="opendate != null" >
+        #{opendate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        #{enddate,jdbcType=DATE},
+      </if>
+      <if test="subcode != null" >
+        #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null" >
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="acctstatus != null" >
+        #{acctstatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nantian.domain.NoBindAccount" >
+    update t_nobindaccount
+    <set >
+      <if test="branchid != null" >
+        BRANCHID = #{branchid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null" >
+        ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        ACCOUNTTYPE = #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="maccountid != null" >
+        MACCOUNTID = #{maccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="customno != null" >
+        CUSTOMNO = #{customno,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        CURRENCY = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="opendate != null" >
+        OPENDATE = #{opendate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        ENDDATE = #{enddate,jdbcType=DATE},
+      </if>
+      <if test="subcode != null" >
+        SUBCODE = #{subcode,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null" >
+        PROPERTY = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="acctstatus != null" >
+        ACCTSTATUS = #{acctstatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nantian.domain.NoBindAccount" >
+    update t_nobindaccount
+    set BRANCHID = #{branchid,jdbcType=VARCHAR},
+      ACCOUNTNAME = #{accountname,jdbcType=VARCHAR},
+      ACCOUNTTYPE = #{accounttype,jdbcType=VARCHAR},
+      MACCOUNTID = #{maccountid,jdbcType=VARCHAR},
+      CUSTOMNO = #{customno,jdbcType=VARCHAR},
+      CURRENCY = #{currency,jdbcType=VARCHAR},
+      OPENDATE = #{opendate,jdbcType=DATE},
+      ENDDATE = #{enddate,jdbcType=DATE},
+      SUBCODE = #{subcode,jdbcType=VARCHAR},
+      PROPERTY = #{property,jdbcType=VARCHAR},
+      ACCTSTATUS = #{acctstatus,jdbcType=VARCHAR}
+    where ACCOUNTID = #{accountid,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByBranchId" resultMap="BaseResultMap">
+  select 
+    <include refid="Base_Column_List" />
+    from t_nobindaccount
+    where 1=1 
+    <if test="branchid!=null and branchid!=''">
+        and BRANCHID = #{branchid}
+    </if>
+    <if test="accountid!=null and accountid!=''">
+        and accountid like CONCAT(CONCAT('%',#{accountid}),'%')
+    </if>
+    <if test="accountname!=null and accountname!=''">
+        and accountname like CONCAT(CONCAT('%',#{accountname}),'%')
+    </if>
+    <if test="list.size()!=0">
+        and accounttype in 
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </if>
+     
+  </select>
+</mapper>
