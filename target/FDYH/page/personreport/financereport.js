@@ -27,7 +27,7 @@ Ext.application({
 						width:300,
 						displayField:'name',  
 				        valueField:'value',
-				        value:'6,7',
+				        value:'',
 				        forceSelection: false,
 				        editable:false,
 				        allowBlank:false,
@@ -37,9 +37,9 @@ Ext.application({
 				            type:'array',  
 				            fields:["value","name"],
 				            data:[
-					                ['6,7','全部'],  
-					                ['6','对公理财'],  
-					                ['7','个人理财']
+					                ['','全部'],  
+					                ['1','对公理财'],  
+					                ['2','个人理财']
 					            ] 
 				        }
 					}]
@@ -481,7 +481,7 @@ Ext.application({
 							'enddate' : enddate,
 							'channel':channel
 						};
-						
+						detailGridStore.currentPage=1;
 						detailGridStore.load();
 						queryPanel.hide();
 						editPanel.anchor='100% 100%';
@@ -501,7 +501,7 @@ Ext.application({
 		
 		var detailGridStore=Ext.create('Ext.data.Store', {
 			autoLoad:false,
-			pageSize:15,
+			pageSize:20,
 			proxy:{
 				type: 'ajax',
 				actionMethods:{

@@ -189,15 +189,23 @@ public class ExportExcelController
 		DecimalFormat df=new DecimalFormat("#,###,###,###,##0.00");
 		List<Map> list=null;
 		String outputName;
+		ArrayList accttype=new ArrayList();
+		String[] s=accounttype.split(",");
+		for(int i=0;i<s.length;i++)
+			accttype.add(s[i]);
+		list=queryService.queryAccountBalAndYearDayAvg_1(queryEndDate, branchid, managerid,accountid, accountname, customno, subcode,null, status,accttype);
 		if(accounttype.equals("2"))
 		{
 			outputName="对公定期存款余额明细"+enddate;
-			list=queryService.queryAccountBalAndYearDayAvg(queryEndDate, branchid, managerid,accountid, accountname, customno, subcode,null, status,AccountType.PUBLIC_FIXED_ACCOUNT);
+			//list=queryService.queryAccountBalAndYearDayAvg(queryEndDate, branchid, managerid,accountid, accountname, customno, subcode,null, status,AccountType.PUBLIC_FIXED_ACCOUNT);
 		}
-		else
+		else if(accounttype.equals("1"))
 		{
 			outputName="对公活期存款余额明细"+enddate;
-			list=queryService.queryAccountBalAndYearDayAvg(queryEndDate, branchid,managerid, accountid, accountname, customno, subcode,null, status,AccountType.PUBLIC_CURRENT_ACCOUNT);
+			//list=queryService.queryAccountBalAndYearDayAvg(queryEndDate, branchid,managerid, accountid, accountname, customno, subcode,null, status,AccountType.PUBLIC_CURRENT_ACCOUNT);
+		}else
+		{
+			outputName="对公活期+定期存款余额明细"+enddate;
 		}
 		Date beginDate=Utils.str82date(enddate.substring(0,4)+"0101");
 		String year=enddate.substring(0, 4);

@@ -298,6 +298,7 @@ Ext.application({
 			pageSize:15,
 			proxy:{
 				type: 'ajax',
+				timeout:300000,
 				actionMethods:{
 					create: 'POST', 
 					read: 'POST', 

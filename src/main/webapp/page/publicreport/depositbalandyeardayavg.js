@@ -35,7 +35,8 @@ Ext.application({
 				            fields:["value","name"],  
 				            data:[
 				                ['1','对公活期'],  
-				                ['2','对公定期']
+				                ['2','对公定期'],
+				                ['1,2','全部']
 				            ] 
 				        }
 					}]
@@ -300,6 +301,7 @@ Ext.application({
 			pageSize:15,
 			proxy:{
 				type: 'ajax',
+				timeout:300000,
 				actionMethods:{
 					create: 'POST', 
 					read: 'POST', 

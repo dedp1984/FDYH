@@ -272,6 +272,12 @@ public class QueryService
 	{
 		return reportMapper.selectAccountBalAndYearDayAvg(date, branchid, managerid,accountId, accountName, customNo, subCode, property, status, accounttype);
 	}
+	
+	public List<Map> queryAccountBalAndYearDayAvg_1(Date date,String branchid,String managerid, String accountId,String accountName,String customNo,String subCode,String property,String status,ArrayList accounttype)
+	{
+		return reportMapper.selectAccountBalAndYearDayAvg_1(date, branchid, managerid,accountId, accountName, customNo, subCode, property, status, accounttype);
+	}
+	
 	/**
 	 * 功能：根据日期+客户经理号查询关联对公账户指定日期时点余额
 	 * 参数：managerId客户经理工号

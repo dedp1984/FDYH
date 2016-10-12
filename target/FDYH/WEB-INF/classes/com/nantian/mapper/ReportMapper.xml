@@ -71,7 +71,7 @@
 			left join T_FINANCE_PRODUCT_TYPE d on c.productid=d.id
 		where 1=1 and d.isjsckye=1
 			<![CDATA[
-				and (not (c.enddate<#{startdate} or c.startdate>#{enddate}))
+				and (c.startdate<=#{enddate} and c.enddate>=#{enddate})
 			]]>
 			<if test="managerid!=null and managerid!=''">
 			    and a.managerid=#{managerid}
@@ -169,11 +169,8 @@
 			left join t_manager_account c on a.accountid=c.accountid
 			left join  t_finance_product_type d  on b.productid=d.id
 		where 1=1
-		 	<if test="accttypelist !=null">
-         		and a.accounttype in 
-       		 	<foreach collection="accttypelist" index="index" item="item" open="(" separator="," close=")">
-            		#{item}
-        		</foreach>
+		 	<if test="busitype !=null and busitype!=''">
+         		and d.type=#{busitype} 
     		</if>
     		<if test="managerid!=null and managerid!=''">
     		    and   c.managerid=#{managerid} 
@@ -210,6 +207,8 @@
 			inner join T_ACCOUNT_PERSON_PLEDGE b on a.accountid=b.accountid
  			left join t_manager_account c on a.accountid=c.accountid		
 		where 1=1  and   c.managerid=#{managerid} 
+
+		 
 			<if test="startdate!=null">
 			    and   b.startdate>=#{startdate}
 			</if>
@@ -217,7 +216,8 @@
 			    <![CDATA[
 			    	 and   b.enddate <=#{enddate}
 			    ]]>
-			</if>			
+			</if>	
+			
   </select>  
   
   <select id="selectPublicDepositChangeList" resultType="hashMap">
@@ -337,7 +337,7 @@
 		    ]]>
 		    
 		</if>
-		and a.accounttype='5' and a.subaccttype='1'
+		<!-- and a.accounttype='5' and a.subaccttype='1' -->
 	    group by b.saleid
   </select>
   
@@ -401,16 +401,16 @@
 		    ]]>
 		    
 		</if>
-		<if test="accttypelist !=null">
-	         and a.accounttype in 
-	        <foreach collection="accttypelist" index="index" item="item" open="(" separator="," close=")">
-	            #{item}
-	        </foreach>
+		<if test="busitype !=null and busitype!=''">
+	         and e.type=#{busitype}
     	</if>
     	<if test="iszy!=null and iszy!=''">
     	    b.iszy=#{iszy}
     	</if>
-	group by b.saleid
+	
+    group by b.saleid
+    order by d.branchid,a.accounttype,a.accountid
+	
   </select>
   
    <select id="selectFinanceAvgDetail" resultType="hashMap">
@@ -425,6 +425,8 @@
 		b.channel,
 		b.productbatch as productbatch,
 		e.name as productname,
+		e.isjsckye,
+		e.isjsrj,
 		c.percent as percent
 	from 
 
@@ -440,18 +442,15 @@
 
 		left join  sys_branch f  on a.branchid=f.branchid
 
-	where 1=1 
+	where 1=1 and e.isjsckye=1
 		<if test="managerid!=null and managerid!=''">
 		    and c.managerid=#{managerid}
 		</if>
 		<![CDATA[
 		and   not (b.enddate<#{startdate}  or   b.startdate>#{enddate})
 		]]>
-		<if test="accttypelist !=null">
-	         and a.accounttype in 
-	        <foreach collection="accttypelist" index="index" item="item" open="(" separator="," close=")">
-	            #{item}
-	        </foreach>
+		<if test="busitype !=null and busitype!=''">
+	         and e.type =#{busitype}
     	</if>
 	group by b.saleid
   </select>
@@ -486,11 +485,13 @@
       <id column="accountid" property="accountid" jdbcType="VARCHAR"/>
       <result column="branchname" property="branchname" jdbcType="VARCHAR"/>
       <result column="managerid" property="managerid" jdbcType="VARCHAR"/>
+      <result column="managername" property="managername" jdbcType="VARCHAR"/>
       <result column="percent" property="percent" jdbcType="VARCHAR"/>
   </resultMap>
   <select id="selectBinds" parameterType="String" resultMap="BindsResultMap">
       select 
-      	b.accountname as managerid,
+        b.accountid as managerid,
+      	b.accountname as managername,
       	a.percent,
       	c.branchname
       from 
@@ -544,7 +545,76 @@
 	     and  a.accountid like CONCAT(CONCAT('%',#{accountid}),'%')
 	  </if>
 	  <if test="accounttype!=null and accounttype!=''">
-	      and a.accounttype =#{accounttype}
+	      and (a.accounttype=#{accounttype} )
+	  </if>
+	  <if test="branchid!=null and branchid!=''">
+	      and f.branchid=#{branchid}
+	  </if>
+	  <if test="managerid!=null and managerid!=''">
+	      and f.accountid=#{managerid}
+	  </if>
+	  <if test="accountname!=null and accountname!=''">
+	     and  a.accountname like CONCAT(CONCAT('%',#{accountname}),'%') 
+	  </if>
+	  <if test="customno!=null and customno!=''">
+	       and  a.customno like CONCAT(CONCAT('%',#{customno}),'%') 
+	  </if>
+	  <if test="property!=null and property!=''">
+	       and  a.property like CONCAT(CONCAT('%',#{property}),'%') 
+	  </if>
+	  <if test="subcode!=null and subcode!=''">
+	       and  a.subcode like CONCAT(CONCAT('%',#{subcode}),'%') 
+	  </if>
+	  <if test="status!=null and status!=''">
+	       and  a.acctstatus=#{status} 
+	  </if>
+	  group by a.accountid
+  </select>
+  <select id="selectAccountBalAndYearDayAvg_1" resultMap="BalAndYearDayAvgResultMap">
+      select 
+      	a.gendate as balgendate,
+      	a.accountid as accountid ,
+      	a.branchid,
+      	a.accountname,
+      	a.customno,
+      	a.subcode,
+      	a.bal as bal,
+      	a.yearavg ,
+      	a.m1,
+      	a.m2,
+      	a.m3,
+      	a.m4,
+      	a.m5,
+      	a.m6,
+      	a.m7,
+      	a.m8,
+      	a.m9,
+      	a.m10,
+      	a.m11,
+      	a.m12,
+      	a.mrate,
+      	a.fdfs,
+      	a.fdbl,
+      	a.wjfl,
+      	a.acctstatus,
+      	c.branchname 
+      from 
+      	<![CDATA[
+      	(select * from  (select distinct accountid,gendate from t_accountbal_record where gendate<=#{gendate} order by gendate desc) f  group by accountid order by gendate desc)  g  
+      	]]>     
+      left join  t_accountbal_record a on a.accountid=g.accountid and a.gendate=g.gendate
+      left join  t_account_base d on a.accountid=d.accountid
+      left join t_manager_account e on d.accountid=e.accountid
+      left join  sys_account f on e.managerid=f.accountid
+      left join  sys_branch c on d.branchid=c.branchid
+	  where 1=1	and 
+	  a.accounttype in 
+	    <foreach item="item" index="index" collection="accounttype"
+	      	    open="(" separator="," close=")">
+					#{item}
+			</foreach>
+	  <if test="accountid!=null and accountid!=''">
+	     and  a.accountid like CONCAT(CONCAT('%',#{accountid}),'%')
 	  </if>
 	  <if test="branchid!=null and branchid!=''">
 	      and f.branchid=#{branchid}

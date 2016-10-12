@@ -22,6 +22,10 @@ Ext.application({
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/对公贷款余额模板.xlsx">对公贷款余额模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -31,11 +35,15 @@ Ext.application({
 					columnWidth:0.7,
 					xtype: 'filefield',
 			        name: 'filedqbzdk',
-			        fieldLabel: '短期保障贷款日均',
+			        fieldLabel: '短期保证贷款日均',
 			        msgTarget: 'side',
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/短期保证贷款日均模板.xlsx">短期保证贷款日均模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -50,6 +58,10 @@ Ext.application({
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/短期抵押质押贷款日均模板.xlsx">短期抵押质押贷款日均模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -64,6 +76,10 @@ Ext.application({
 			        allowBlank: false,
 			        labelWidth:150,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/短期信用贷款日均模板.xlsx">短期信用贷款日均模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -78,6 +94,10 @@ Ext.application({
 			        allowBlank: false,
 			        labelWidth:150,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/中长期保证贷款日均模板.xlsx">中长期保证贷款日均模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -92,6 +112,10 @@ Ext.application({
 			        allowBlank: false,
 			        labelWidth:150,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/中长期抵押质押贷款日均模板.xlsx">中长期抵押质押贷款日均模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -106,6 +130,10 @@ Ext.application({
 			        allowBlank: false,
 			        labelWidth:150,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/中长期信用贷款日均模板.xlsx">中长期信用贷款日均模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -658,6 +686,7 @@ Ext.application({
 			}, {
 				header : '分配管理机构',
 				xtype : 'actioncolumn',
+				hidden:true,
 				width:100,
 				align:'center',
 				items : [ {
@@ -688,7 +717,21 @@ Ext.application({
 				store : gridStore, // GridPanel使用相同的数据源
 				dock : 'bottom',
 				displayInfo : true
-			} ]
+			} ,{
+				xtype:'toolbar',
+				dock:'top',
+				items:['->',{
+					glyph:'xf067@FontAwesome',
+					text:'导出EXCEL',
+					handler:function(){
+						var accounttype='3';
+						var requestUrl=Ext.String.format(
+					            '../../action/export/ExportUnBindAccount?accounttypes={0}',accounttype);
+						window.location.href=requestUrl;
+						
+					}
+				}]
+			}]
 
 		});
 		var queryPanel=Ext.create('Ext.panel.Panel',{

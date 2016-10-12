@@ -133,4 +133,15 @@ public interface ReportMapper
 				 									@Param("property")String property,
 				 									@Param("status")String status,
 				 									@Param("accounttype")String accounttype);
+	
+	public List<Map>  selectAccountBalAndYearDayAvg_1(@Param("gendate")Date date,
+													@Param("branchid")String branchid,
+													@Param("managerid")String managerid,
+													@Param("accountid")String accountId,
+													@Param("accountname")String accountName,
+													@Param("customno")String customNo,
+													@Param("subcode")String subCode,
+													@Param("property")String property,
+													@Param("status")String status,
+													@Param("accounttype")ArrayList accounttype);
 }

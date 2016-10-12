@@ -17,11 +17,23 @@ Ext.application({
 					columnWidth:0.7,
 					xtype: 'filefield',
 			        name: 'filekhfp',
-			        fieldLabel: '个人客户分配关系',
+			        fieldLabel: '个人客户分配关系文件明细',
 			        msgTarget: 'side',
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				}]
+			},{
+				xtype:'panel',
+				layout:'column',
+				border:false,
+				items:[{
+					columnWidth:0.7,
+					xtype: 'textarea',
+			        id: 'errmsg',
+			        fieldLabel: '批量导入处理结果',
+			        msgTarget: 'side',
+			        labelWidth:150
 				}]
 			}],
 			buttonAlign:'left',
@@ -33,12 +45,11 @@ Ext.application({
 							url:'../../action/uploadManagerAllocate',
 							waitMsg:'正在上传文件。。。。',
 							success:function(p,o){
-								alert('上传文件成功');
-								gridStore.load();
+								uploadForm.getForm().findField("errmsg").setValue('批量导入账户分配关系成功');
 							},
 							failure:function(form,action){
 								
-								alert('上传文件失败:'+Ext.JSON.decode(action.response.responseText).errors.errmsg);
+								uploadForm.getForm().findField("errmsg").setValue('导入失败:'+Ext.JSON.decode(action.response.responseText).errors.errmsg);
 							}
 						})
 					}
@@ -567,7 +578,7 @@ Ext.application({
 		var queryPanel=Ext.create('Ext.panel.Panel',{
 			layout:'anchor',
 			anchor:'100% 100%',
-			items:[uploadForm,queryGrid]
+			items:[uploadForm]
 		});
 		var editPanel =Ext.create('Ext.panel.Panel',{
 			name:'editPanel',

@@ -253,7 +253,7 @@ Ext.application({
 	            sortable: true,
 	            border:true
 	        }, {
-	            text: '存款日均余额',
+	            text: '存款进度日均',
 	            width: 150,
 	            dataIndex: 'depositavg',
 	            align:'right',
@@ -270,7 +270,7 @@ Ext.application({
 	            align:'right',
 	            sortable: true
 	        },{
-	            text: '贷款日均余额',
+	            text: '贷款进度日均',
 	            width: 150,
 	            dataIndex: 'creditavg',
 	            align:'right',

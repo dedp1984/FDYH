@@ -624,7 +624,7 @@ Ext.application({
 						var accountname = queryForm.getForm().findField('accountname').getValue();
 						var accounttype=queryForm.getForm().findField('accounttype').getValue();
 						var requestUrl=Ext.String.format(
-					            '../../action/export/ExportUnBindAccount?accountid={0}&accountname={1}&accounttype={2}',
+					            '../../action/export/ExportUnBindAccount?accountid={0}&accountname={1}&accounttypes={2}',
 					            accountid,accountname,accounttype);
 						window.location.href=requestUrl;
 						

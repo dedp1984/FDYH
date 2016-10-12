@@ -298,6 +298,7 @@ Ext.application({
 			pageSize:15,
 			proxy:{
 				type: 'ajax',
+				timeout:300000,
 				actionMethods:{
 					create: 'POST', 
 					read: 'POST', 
@@ -439,7 +440,7 @@ Ext.application({
 		queryGrid.view.on('expandBody', function (rowNode, record, expandRow, eOpts) {  
 			    if(record.get('binds').length>0){
 			    	innerStore=Ext.create('Ext.data.Store', {
-						fields:['branchname','managerid','percent']
+						fields:['branchname','managerid','managername','percent']
 					});
 					innerStore.loadData(record.get('binds'));
 			        innerGrid=Ext.create('Ext.grid.Panel',{
@@ -449,7 +450,11 @@ Ext.application({
 			        		width:300,
 			        		dataIndex:'branchname'
 			        	},{
-			        		text:'归属客户经理',
+			        		text:'归属客户经理姓名',
+			        		width:300,
+			        		dataIndex:'managername'
+			        	},{
+			        		text:'归属客户经理工号',
 			        		width:300,
 			        		dataIndex:'managerid'
 			        	},{

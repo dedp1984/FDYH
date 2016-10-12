@@ -170,6 +170,7 @@ Ext.application({
 						var accountid = queryForm.getForm().findField('accountid').getValue();
 						gridStore.setProxy({
 							type: 'ajax',
+							timeout:300000,
 				            url: '../../action/query/QueryPersonBusinessData',
 				            reader: {  
 			                    type:'json'

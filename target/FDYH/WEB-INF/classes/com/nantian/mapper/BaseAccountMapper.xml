@@ -34,9 +34,11 @@
     <result column="CHANNEL" jdbcType="VARCHAR" property="channel" />
     <result column="LASTMODIFYID" jdbcType="VARCHAR" property="lastmodifyid" />
     <result column="LASTMODIFYDATE" jdbcType="DATE" property="lastmodifydate" />
+    <result column="ACCOUNTNAME" jdbcType="DATE" property="lastmodifyname" />
   </resultMap>
   <select id="selectFinanceDetail" parameterType="String" resultMap="FinanceDetailResultMap">
-      select * from t_finance_detail where accountid=#{accountid}
+      select a.*,b.accountname from t_finance_detail a 
+      left join sys_account b on a.lastmodifyid=b.accountid where a.accountid=#{accountid}
   </select>
   <!-- 查询质押存款明细-->
   <resultMap id="PledgeDetailResultMap" type="com.nantian.domain.PersonPledgeAccount">
@@ -53,6 +55,7 @@
    <resultMap id="BindsResult" type="java.util.HashMap">
     <id column="ACCOUNTID" jdbcType="VARCHAR" property="accountid" />
     <id column="MANAGERID" jdbcType="VARCHAR" property="managerid" />
+    <result column="ACCOUNTNAME" jdbcType="VARCHAR" property="managername"/>
     <result column="PERCENT" jdbcType="DOUBLE" property="percent" />
     <result column="TYPE" jdbcType="VARCHAR" property="type" />
     <result column="BRANCHID" jdbcType="VARCHAR" property="branchid" />
@@ -91,9 +94,13 @@
 		d.branchname as branchname
 	from 
 		t_account_base a  
-		left  join sys_branch d  on a.branchid=d.branchid
-		left  join t_manager_account b on a.accountid=b.accountid
-	where 1=1
+		<if test="financecreateid!=null and financecreateid!=''">
+			inner join t_finance_detail c on c.accountid=a.accountid
+    	</if>		
+		left join sys_branch d on a.branchid=d.branchid 
+		left join t_manager_account b on a.accountid=b.accountid
+		left join sys_account e on e.accountid=b.managerid
+	where (1=1
     <if test="accountid != null and accountid!=''">
         and a.ACCOUNTID like  CONCAT(CONCAT('%',#{accountid}),'%')
     </if>
@@ -101,7 +108,7 @@
         and a.ACCOUNTNAME like  CONCAT(CONCAT('%',#{accountname}),'%')
     </if>
     <if test="branchid != null and branchid!=''">
-        and a.branchid=#{branchid}
+        and e.branchid=#{branchid}
     </if>
     <if test="managerid != null and managerid!=''">
         and b.managerid=#{managerid}
@@ -114,6 +121,10 @@
     </if>
     <if test="subaccttype!=null and subaccttype!=''">
         subaccttype=#{subaccttype}
+    </if>
+    )
+	 <if test="(financecreateid!=null and financecreateid!='') and (accountid==null or accountid=='') and (accountname==null or accountname=='')">
+        or (c.lastmodifyid=#{financecreateid})
     </if>
     group by a.accountid
   </select>

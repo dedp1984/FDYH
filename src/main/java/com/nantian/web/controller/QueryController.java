@@ -811,6 +811,12 @@ public class QueryController
 		List<Map> list=null;
 		
 		PageHelper.startPage(Integer.parseInt(startPage), Integer.parseInt(pageSize),true);
+		ArrayList accttype=new ArrayList();
+		String[] s=accounttype.split(",");
+		for(int i=0;i<s.length;i++)
+			accttype.add(s[i]);
+		list=queryService.queryAccountBalAndYearDayAvg_1(queryEndDate, branchid, managerid,accountid, accountname, customno, subcode,null, status,accttype);
+		/*
 		if(accounttype.equals("2"))
 		{
 			list=queryService.queryAccountBalAndYearDayAvg(queryEndDate, branchid, managerid,accountid, accountname, customno, subcode,null, status,AccountType.PUBLIC_FIXED_ACCOUNT);
@@ -818,7 +824,7 @@ public class QueryController
 		else
 		{
 			list=queryService.queryAccountBalAndYearDayAvg(queryEndDate, branchid, managerid,accountid, accountname, customno, subcode,null, status,AccountType.PUBLIC_CURRENT_ACCOUNT);
-		}
+		}*/
 		Date beginDate=Utils.str82date(enddate.substring(0,4)+"0101");
 		String year=enddate.substring(0, 4);
 		int month=Integer.valueOf(enddate.substring(4, 6));

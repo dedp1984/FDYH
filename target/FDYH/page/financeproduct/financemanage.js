@@ -40,6 +40,7 @@ Ext.application({
 							'accountid' : accountId,
 							'accountname':accountName
 						};
+						gridStore.currentPage=1;
 						gridStore.load();
 					}
 				}
@@ -55,6 +56,7 @@ Ext.application({
 		
 		var gridStore = Ext.create('Ext.data.Store', {
 			autoLoad : false,
+			pageSize:15,
 			fields : ['branchid','branch.branchname','accountid','accountname','accounttype','submitid','submitdate','binds','branch','financeDetail'],
 			proxy : {
 				type : 'ajax',
@@ -66,8 +68,8 @@ Ext.application({
 				},
 				reader: {  
                     type:'json',
-                    root:'items'
-     
+                    root:'items',
+                    totalProperty: 'totalsize'
 				},
 				url : '../../action/financeProduct/queryFinanceDetailList'
 			}
@@ -765,7 +767,7 @@ Ext.application({
 		});
 		var detailStore = Ext.create('Ext.data.Store', {
 			fields : ['branchid','branch.branchname','accountid','accountname','accounttype','submitid','submitdate','binds','branch','financeDetail',
-			          'channel','enddate','startdate','tranamt','productbatch','productid','saleid','iszy']
+			          'channel','enddate','startdate','tranamt','productbatch','productid','saleid','iszy','lastmodifyid','lastmodifyname','lastmodifydate','editable']
 	    });
 		var detailGrid=Ext.create('Ext.grid.Panel',{
 			anchor:'100% 50%',
@@ -800,7 +802,7 @@ Ext.application({
 						return '是';
 					}
 				},
-				width:100
+				width:80
 			},{
 				header:'起息日',
 				dataIndex:'startdate',
@@ -821,13 +823,75 @@ Ext.application({
 		            	return value.substring(0,10);
 		            }
 			},{
-				header : '编辑理财产品信息',
+				header:'操作人员',
+				dataIndex:'lastmodifyname',
+				width:100
+			},{
+				header : '编辑',
 				xtype : 'actioncolumn',
-				width:100,
+				width:60,
 				align:'center',
+				renderer:function(value,meta,record){
+					if(record.get('editable')==true){
+						return "<img src='../../images/detail.gif'></img>"
+					}else{
+						return '';
+					}
+				},
+				listeners:{
+					click:function(grid, tmp,rowIndex, colIndex){
+						var record=grid.getStore().getAt(rowIndex);
+						if(record.get('editable')==false){
+							return;
+						}
+						editForm.getForm().findField('accountid').setDisabled(true);
+						editForm.getForm().findField('type').getStore().load();
+						editForm.getForm().findField('type').setValue(record.get('accounttype'));
+						editForm.getForm().findField('channel').setValue(record.get('financeDetail').channel);
+						editForm.getForm().findField('accountid').setValue(record.get('financeDetail').accountid);
+						editForm.getForm().findField('accountname').setValue(record.get('accountname'));
+						editForm.getForm().findField('productid').getStore().load();
+						editForm.getForm().findField('productid').setValue(record.get('financeDetail').productid);
+						editForm.getForm().findField('productbatch').setValue(record.get('financeDetail').productbatch);
+						editForm.getForm().findField('tranamt').setValue(record.get('financeDetail').tranamt);
+						editForm.getForm().findField('iszy').setValue(record.get('financeDetail').iszy);
+						editForm.getForm().findField('saleid').setValue(record.get('financeDetail').saleid);
+						//var startdate = new Date(record.get('financeDetail').startdate);
+						editForm.getForm().findField('startdate').setValue(record.get('financeDetail').startdate.substring(0,10));
+						//var enddate = new Date(record.get('financeDetail').enddate);
+						editForm.getForm().findField('enddate').setValue(record.get('financeDetail').enddate.substring(0,10));
+						bindPanel.removeAll();
+						var binds=grid.getStore().getAt(rowIndex).get('binds');
+						for(var i=0;i<binds.length;i++){
+							var bind=binds[i];
+							var bindForm=new Ext.create('bindForm');
+							var toBranchid=bind.branchid;
+							var toBranchname=bind.branchname;
+							var toManager=bind.managerid;
+							var percent=parseFloat(bind.percent)*100;
+							var type=bind.type;
+							
+			        		bindForm.getForm().findField('toManager').getStore().getProxy().extraParams = {
+								'branchid' : toBranchid
+							};
+			        		bindForm.getForm().findField('toManager').getStore().load();
+			        		
+							bindForm.getForm().findField('toBranchid').setValue(toBranchid);
+							bindForm.getForm().findField('toBranchname').setValue(toBranchname);
+							bindForm.getForm().findField('fromType').setValue(type);
+							bindForm.getForm().findField('toManager').setValue(toManager);
+							bindForm.getForm().findField('percent').setValue(percent);
+							bindForm.getForm().findField('fromType').setValue(type);
+							bindForm.id='bindForm'+i;
+							bindPanel.insert(i,bindForm);
+						}
+						bindPanel.setDisabled(true);
+						editAction=true;
+					}
+				},
 				items : [ {
-					icon:'../../images/detail.gif',
 					handler : function(grid, rowIndex, colIndex, item, e) {
+						return;
 						editForm.getForm().findField('accountid').setDisabled(true);
 						editForm.getForm().findField('type').getStore().load();
 						var record=grid.getStore().getAt(rowIndex);
@@ -881,11 +945,53 @@ Ext.application({
 			},{
 				header : '删除',
 				xtype : 'actioncolumn',
-				width:100,
+				width:60,
 				align:'center',
+				renderer:function(value,meta,record){
+					if(record.get('editable')==true){
+						return "<img src='../../images/del3.gif'></img>"
+					}else{
+						return '';
+					}
+				},
+				listeners:{
+					click:function(grid, tmp,rowIndex, colIndex){
+						var record=grid.getStore().getAt(rowIndex);
+						if(record.get('editable')==false){
+							return;
+						}
+						var currentAccountId=grid.getStore().getAt(rowIndex).get('accountid');
+						var currentAccountName=grid.getStore().getAt(rowIndex).get('accountname');
+						var saleId=grid.getStore().getAt(rowIndex).get('financeDetail').saleid;
+						Ext.Msg.show({
+							msg:'确定删除【'+currentAccountName+'】?', 
+							title:'信息提示', 
+							buttons:Ext.Msg.OKCANCEL,
+							fn:function(btn, text){
+								if (btn == 'ok'){
+							    	var request=Ext.Ajax.request({
+										params: {
+									        accountid: currentAccountId,
+									        saleid:saleId
+									    },
+										url:'../../action/financeProduct/deleteFinanceDetail',
+										success:function(response,options){
+											Ext.Msg.alert('信息提示', '删除成功');
+											editPanel.hide();
+											queryPanel.anchor='100% 100%';
+											queryPanel.updateLayout();
+											queryPanel.show();
+											gridStore.load();
+										}
+									});
+							    }
+							}
+						})
+					}
+				},
 				items : [ {
-					icon:'../../images/del3.gif',
 					handler : function(grid, rowIndex, colIndex, item, e) {
+						return;
 					var currentAccountId=grid.getStore().getAt(rowIndex).get('accountid');
 					var currentAccountName=grid.getStore().getAt(rowIndex).get('accountname');
 					var saleId=grid.getStore().getAt(rowIndex).get('financeDetail').saleid;

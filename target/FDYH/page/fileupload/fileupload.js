@@ -22,6 +22,10 @@ Ext.application({
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/个人定期存款日均模板.xls">个人定期存款日均模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -36,6 +40,10 @@ Ext.application({
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/个人定期存款时点模板.xls">个人定期存款时点模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -50,6 +58,10 @@ Ext.application({
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/个人活期存款日均模板.xls">个人活期存款日均模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -64,6 +76,10 @@ Ext.application({
 			        allowBlank: false,
 			        labelWidth:150,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/个人活期存款时点模板.xls">个人活期存款时点模板</a>'
 				}]
 			},{
 				xtype:'panel',

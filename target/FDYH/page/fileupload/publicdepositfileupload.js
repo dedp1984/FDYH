@@ -1,4 +1,4 @@
-
+﻿
 Ext.application({
 	name : '文件上传',
 	launch : function() {
@@ -22,6 +22,10 @@ Ext.application({
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/对公定期存款账户日均余额模板.xlsx">对公定期存款账户日均余额模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -36,6 +40,10 @@ Ext.application({
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/对公定期存款账户时点余额模板.xlsx">对公定期存款账户时点余额模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -50,6 +58,10 @@ Ext.application({
 			        labelWidth:150,
 			        allowBlank: false,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/对公活期存款账户日均余额模板.xlsx">对公活期存款账户日均余额模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -64,6 +76,10 @@ Ext.application({
 			        allowBlank: false,
 			        labelWidth:150,
 			        buttonText: '选择文件...'
+				},{
+					columnWidth:0.3,
+					xtype:'label',
+					html:'&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../template/对公活期存款账户时点余额模板.xlsx">对公活期存款账户时点余额模板</a>'
 				}]
 			},{
 				xtype:'panel',
@@ -620,6 +636,7 @@ Ext.application({
 				header : '分配管理机构',
 				xtype : 'actioncolumn',
 				width:100,
+				hidden:true,
 				align:'center',
 				items : [ {
 					icon:'../../images/detail.gif',
@@ -649,7 +666,21 @@ Ext.application({
 				store : gridStore, // GridPanel使用相同的数据源
 				dock : 'bottom',
 				displayInfo : true
-			} ]
+			} ,{
+				xtype:'toolbar',
+				dock:'top',
+				items:['->',{
+					glyph:'xf067@FontAwesome',
+					text:'导出EXCEL',
+					handler:function(){
+						var accounttype='1,2';
+						var requestUrl=Ext.String.format(
+					            '../../action/export/ExportUnBindAccount?accounttypes={0}',accounttype);
+						window.location.href=requestUrl;
+						
+					}
+				}]
+			}]
 
 		});
 		var queryPanel=Ext.create('Ext.panel.Panel',{

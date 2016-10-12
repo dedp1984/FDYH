@@ -2,6 +2,7 @@ package com.nantian.custom;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class Utils {
 	 * **/
 	public static int getYearDays(String year)
 	{
-		if((Integer.valueOf(year)/4==0&&Integer.valueOf(year)/100!=0)||(Integer.valueOf(year)/400==0))
+		if((Integer.valueOf(year)%4==0&&Integer.valueOf(year)/100!=0)||(Integer.valueOf(year)/400==0))
 		{
 			return 366;
 		}
@@ -80,7 +81,11 @@ public class Utils {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
 		return df.parse(date);
 	}
-	
+	public static Timestamp str2time(String time) throws ParseException
+	{
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");//设置日期格式
+		return new Timestamp((df.parse(time)).getTime());
+	}
 	public static String get16UUID()
 	{
 		String uuid=UUID.randomUUID().toString();

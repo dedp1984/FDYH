@@ -35,7 +35,8 @@ Ext.application({
 				            fields:["value","name"],  
 				            data:[
 				                ['1','对公活期'],  
-				                ['2','对公定期']
+				                ['2','对公定期'],
+				                ['1,2','全部']
 				            ] 
 				        }
 					}]
@@ -300,6 +301,7 @@ Ext.application({
 			pageSize:15,
 			proxy:{
 				type: 'ajax',
+				timeout:300000,
 				actionMethods:{
 					create: 'POST', 
 					read: 'POST', 
@@ -323,6 +325,7 @@ Ext.application({
 	 	            {name: 'subcode', type: 'string'},
 	 	            {name: 'customno', type: 'string'},
 	 	            {name:'yeardayavg',type:'string'},
+	 	            {name:'yeardayavg1',type:'string'},
 	 	            {name:'balgendate',type:'string'},
 	 	            {name:'avggendate',type:'string'},
 	 	            {name:'binds',type:'array'}
@@ -355,13 +358,18 @@ Ext.application({
 	            dataIndex: 'subcode'
 	        },{
 	            text: '时点余额',
-	            width: 110,
+	            width: 100,
 	            dataIndex: 'bal',
 	            align:'right'
 	        },{
-	            text: '年日均余额',
-	            width: 110,
+	            text: '进度日均',
+	            width: 100,
 	            dataIndex: 'yeardayavg',
+	            align:'right'
+	        },{
+	            text: '年日均',
+	            width: 100,
+	            dataIndex: 'yeardayavg1',
 	            align:'right'
 	        },{
 	            text: '截止日期',
@@ -441,7 +449,7 @@ Ext.application({
 		queryGrid.view.on('expandBody', function (rowNode, record, expandRow, eOpts) {  
 			    if(record.get('binds').length>0){
 			    	innerStore=Ext.create('Ext.data.Store', {
-						fields:['branchname','managerid','percent']
+						fields:['branchname','managerid','managername','percent']
 					});
 					innerStore.loadData(record.get('binds'));
 			        innerGrid=Ext.create('Ext.grid.Panel',{
@@ -451,7 +459,11 @@ Ext.application({
 			        		width:300,
 			        		dataIndex:'branchname'
 			        	},{
-			        		text:'归属客户经理',
+			        		text:'归属客户经理姓名',
+			        		width:300,
+			        		dataIndex:'managername'
+			        	},{
+			        		text:'归属客户经理工号',
 			        		width:300,
 			        		dataIndex:'managerid'
 			        	},{

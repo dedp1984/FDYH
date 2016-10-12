@@ -170,6 +170,7 @@ Ext.application({
 						var accountid = queryForm.getForm().findField('accountid').getValue();
 						gridStore.setProxy({
 							type: 'ajax',
+							timeout:300000,
 				            url: '../../action/query/QueryPersonBusinessData',
 				            reader: {  
 			                    type:'json'
@@ -282,7 +283,7 @@ Ext.application({
 	            dataIndex: 'timebal',
 	            align:'right',
 	            renderer: function (value, meta, record) {
-                    meta.tdAttr = 'data-qtip="' + '定期余额:'+record.get('balfixed') +'活期余额:'+record.get('balcurrent')+'理财余额:'+record.get('balfinance')+ '质押余额:'+record.get('balpledge') +'"';
+                    meta.tdAttr = 'data-qtip="' + '定期余额:'+record.get('balfixed') +'活期余额:'+record.get('balcurrent')+'理财余额:'+record.get('balfinance')+'"';
                     return value;
                 },
 	            sortable: true

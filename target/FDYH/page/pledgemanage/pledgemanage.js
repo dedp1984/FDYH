@@ -193,6 +193,7 @@ Ext.application({
 		
 		var gridStore = Ext.create('Ext.data.Store', {
 			autoLoad : false,
+			pageSize:20,
 			fields : ['baseAccount','baseAccount.branch','baseAccount.branchid','baseAccount.branch.branchname','accountid','baseAccount.accountname',
 			          'baseAccount.accounttype','binds','branch','startdate','enddate','tranamt','saleid'],
 			proxy : {
@@ -205,7 +206,8 @@ Ext.application({
 				},
 				reader: {  
                     type:'json',
-                    root:'items'
+                    root:'items',
+                    totalProperty: 'totalsize'
      
 				},
 				url : '../../action/personPledge/queryPersonPledgeDetailList'
@@ -444,10 +446,13 @@ Ext.application({
 								        'accountid':cmp.getValue()
 								    },
 								    success: function(response){
-								
+								    	
 								        var data = Ext.JSON.decode(response.responseText);
-								        if(data.success==false)
+								        if(data.success==false){
+								        	
+								        	alert("客户账号未建立分配关系");
 								        	return;
+								        }
 								        bindPanel.removeAll();
 								        var binds=data.items.binds;
 								        editForm.getForm().findField('accountname').setValue(data.items.accountname);
@@ -475,6 +480,9 @@ Ext.application({
 											bindPanel.insert(i,bindForm);
 										}
 										bindPanel.setDisabled(true);
+								    },
+								    failure:function(){
+								    	alert("111");
 								    }
 								});
 							}

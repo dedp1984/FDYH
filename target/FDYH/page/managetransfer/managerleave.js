@@ -286,6 +286,7 @@ Ext.application({
 		
 		var ownAccountStore=Ext.create('Ext.data.Store', {
 			autoLoad : false,
+			pageSize:10000,
 			fields : ['branchid','branch.branchname','accountid','accountname','accounttype','submitid','submitdate','binds','branch','percent'],
 			proxy : {
 				type : 'ajax',

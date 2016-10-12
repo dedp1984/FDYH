@@ -330,7 +330,7 @@ Ext.application({
 		
 		var detailGridStore=Ext.create('Ext.data.Store', {
 			autoLoad:false,
-			pageSize:15,
+			pageSize:20,
 			proxy:{
 				type: 'ajax',
 				actionMethods:{
